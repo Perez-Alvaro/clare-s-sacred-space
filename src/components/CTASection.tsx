@@ -26,19 +26,19 @@ const CTASection = () => {
                 color: 'hsl(var(--warm-white))' 
               }}
             >
-              Oración en movimiento
+              "o todo o nada" - Clare Crockett.
             </p>
             <h2 
               className="mb-6 text-4xl md:text-5xl"
               style={{ color: 'hsl(var(--warm-white))' }}
             >
-              Comienza tu camino
+              Queremos formar parte de tu camino.
             </h2>
             <p 
               className="text-lg max-w-2xl mx-auto leading-relaxed"
-              style={{ color: 'hsl(var(--warm-white))/90' }}
+              style={{ color: 'hsl(var(--warm-white))' }}
             >
-              Descubre piezas únicas creadas con amor franciscano. 
+              Descubrí piezas únicas creadas con amor franciscano. 
               Cada objeto es una invitación a la contemplación y la conexión espiritual.
             </p>
           </div>
@@ -73,7 +73,7 @@ const CTASection = () => {
           {/* Mensaje final */}
           <p 
             className="text-sm animate-fade-in-up delay-200"
-            style={{ color: 'hsl(var(--warm-white))/80' }}
+            style={{ color: 'hsl(var(--warm-white))' }}
           >
             También puedes seguirnos en redes sociales para ver nuestras últimas creaciones
           </p>

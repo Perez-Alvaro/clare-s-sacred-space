@@ -1,8 +1,11 @@
 import CollectionCard from './CollectionCard';
 import oratorioImg from '@/assets/oratorio.jpg';
-import denarioImg from '@/assets/denario.jpg';
+import kraftImg from '@/assets/kraft.jpg';
 import llaveroImg from '@/assets/llavero.jpg';
 import macrameImg from '@/assets/macrame.jpg';
+import canastaImg from '@/assets/canasta.jpg';
+import centroMesaImg from '@/assets/centroMesa.jpg';
+import macetaImg from '@/assets/maceta.jpg';
 
 const Collections = () => {
   const collections = [
@@ -12,9 +15,9 @@ const Collections = () => {
       image: oratorioImg,
     },
     {
-      title: 'Denarios',
-      description: 'Cuentas de oración artesanales tejidas con devoción. Acompañan tus momentos de contemplación y silencio.',
-      image: denarioImg,
+      title: 'Canastas Kraft',
+      description: 'Creadas con diseño artesanal y simplicidad cálida. Son un abrazo práctico para tus objetos cotidianos, acompañando momentos de silencio, hogar y presencia.',
+      image: kraftImg,
     },
     {
       title: 'Llaveros Devocionales',
@@ -22,10 +25,26 @@ const Collections = () => {
       image: llaveroImg,
     },
     {
-      title: 'Macramé Espiritual',
-      description: 'Pulseras y objetos tejidos a mano con intención. Cada nudo es una oración, cada hilo una conexión.',
+      title: 'Tejidos de Macramé',
+      description: 'Objetos tejidos a mano con intención. Cada nudo es una oración, cada hilo una conexión.',
       image: macrameImg,
     },
+     {
+      title: 'Canastas de Macramé',
+      description: 'Tejidas con manos pacientes y corazón orante. Cada nudo sostiene historia y propósito. Perfectas para acompañar tus espacios con belleza, orden y calidez contemplativa.',
+      image: canastaImg,
+    },
+      {
+      title: 'Centros de mesa',
+      description: 'Detalles que transforman el espacio. Cada pieza invita a la quietud, a la belleza sencilla y al encuentro con lo sagrado que habita en lo cotidiano.',
+      image: centroMesaImg,
+    },
+      {
+      title: 'Sostenedores de macetas en macramé',
+      description: 'Tejidos que elevan y sostienen. Un recordatorio de que la vida crece mejor cuando está sostenida por amor, luz y raíces profundas.',
+      image: macetaImg,
+    },
+
   ];
 
   return (
