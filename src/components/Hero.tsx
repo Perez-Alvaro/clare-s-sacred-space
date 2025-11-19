@@ -5,7 +5,7 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Imagen de fondo */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${heroImage})`,
@@ -31,23 +31,31 @@ const Hero = () => {
             CLARE
           </h1>
 
-          <p className="text-xl md:text-2xl mb-4 leading-relaxed animate-fade-in-up delay-300" 
-             style={{ color: 'hsl(var(--soft-brown))' }}>
+          <p className="text-xl md:text-2xl mb-4 leading-relaxed animate-fade-in-up delay-300"
+            style={{ color: 'hsl(var(--soft-brown))' }}>
             Artes con propósito, camino y oración
           </p>
 
-          <p className="text-lg mb-12 animate-fade-in-up delay-400" 
-             style={{ color: 'hsl(var(--earth))' }}>
+          <p className="text-lg mb-12 animate-fade-in-up delay-400"
+            style={{ color: 'hsl(var(--earth))' }}>
             Regalos que acompañan el camino espiritual, tejidos con fe y amor artesanal
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up delay-500">
-            <button className="clare-btn clare-btn-primary w-full sm:w-auto">
-              Ver Tienda
+          <div className="flex justify-center animate-fade-in-up delay-500">
+            <button
+              className="clare-btn clare-btn-primary w-full sm:w-auto"
+              onClick={() => {
+                const collectionsSection = document.getElementById('colecciones');
+                if (collectionsSection) {
+                  collectionsSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              }}
+            >
+              Ver catálogo
               <ArrowRight size={20} />
-            </button>
-            <button className="clare-btn clare-btn-secondary w-full sm:w-auto">
-              Nubes de Regalo
             </button>
           </div>
         </div>
@@ -56,9 +64,9 @@ const Hero = () => {
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
         <div className="w-6 h-10 rounded-full border-2 flex items-start justify-center p-2"
-             style={{ borderColor: 'hsl(var(--soft-brown))' }}>
-          <div className="w-1.5 h-1.5 rounded-full" 
-               style={{ backgroundColor: 'hsl(var(--terracotta))' }} />
+          style={{ borderColor: 'hsl(var(--soft-brown))' }}>
+          <div className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: 'hsl(var(--terracotta))' }} />
         </div>
       </div>
     </section>
