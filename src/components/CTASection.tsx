@@ -5,7 +5,7 @@ const CTASection = () => {
   return (
     <section
       className="clare-section relative overflow-hidden"
-      style={{ backgroundColor: 'hsl(var(--terracotta))' }}
+      style={{ backgroundColor: '#a26953' }}
     >
       {/* Patrón decorativo de fondo */}
       <div
@@ -61,7 +61,10 @@ const CTASection = () => {
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button
+              <a
+                href="https://wa.me/5493534259493"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-3"
                 style={{
                   backgroundColor: 'transparent',
@@ -71,7 +74,7 @@ const CTASection = () => {
               >
                 <MessageCircle size={20} />
                 Contactar por WhatsApp
-              </button>
+              </a>
             </div>
           </RevealOnScroll>
 

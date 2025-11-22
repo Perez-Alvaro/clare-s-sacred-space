@@ -33,7 +33,7 @@ const Hero = () => {
 
           <p className="text-xl md:text-2xl mb-4 leading-relaxed animate-fade-in-up delay-300"
             style={{ color: 'hsl(var(--soft-brown))' }}>
-            Artes con propósito, camino y oración
+            Productos hechos con manos pacientes y corazón orante.
           </p>
 
           <p className="text-lg mb-12 animate-fade-in-up delay-400"
@@ -41,7 +41,7 @@ const Hero = () => {
             Regalos que acompañan el camino espiritual, tejidos con fe y amor artesanal
           </p>
 
-          <div className="flex justify-center animate-fade-in-up delay-500">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-500">
             <button
               className="clare-btn clare-btn-primary w-full sm:w-auto"
               onClick={() => {
@@ -57,6 +57,15 @@ const Hero = () => {
               Ver catálogo
               <ArrowRight size={20} />
             </button>
+            <a
+              href="https://www.tiendanube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="clare-btn clare-btn-secondary w-full sm:w-auto"
+            >
+              Ver en Tienda Nube
+              <ArrowRight size={20} />
+            </a>
           </div>
         </div>
       </div>

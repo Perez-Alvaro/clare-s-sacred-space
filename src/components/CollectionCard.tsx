@@ -4,24 +4,25 @@ interface CollectionCardProps {
   title: string;
   description: string;
   image: string;
+  link?: string;
   delay?: string;
 }
 
-const CollectionCard = ({ title, description, image, delay = '0ms' }: CollectionCardProps) => {
+const CollectionCard = ({ title, description, image, link, delay = '0ms' }: CollectionCardProps) => {
   return (
-    <div 
+    <div
       className="clare-card group cursor-pointer animate-fade-in-up"
       style={{ animationDelay: delay }}
     >
       {/* Imagen */}
       <div className="relative overflow-hidden rounded-lg mb-6 aspect-square">
-        <img 
-          src={image} 
+        <img
+          src={image}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           loading="lazy"
         />
-        <div 
+        <div
           className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
           style={{ backgroundColor: 'hsl(var(--terracotta))' }}
         />
@@ -35,15 +36,16 @@ const CollectionCard = ({ title, description, image, delay = '0ms' }: Collection
         <p className="mb-6 leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
           {description}
         </p>
-        
+
         {/* Botón */}
-        <button 
+        <a
+          href={link || '#'}
           className="inline-flex items-center gap-2 font-medium transition-all duration-300 group-hover:gap-4"
           style={{ color: 'hsl(var(--terracotta))' }}
         >
           Ver productos
           <ArrowRight size={18} />
-        </button>
+        </a>
       </div>
     </div>
   );

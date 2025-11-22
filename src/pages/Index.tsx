@@ -12,7 +12,6 @@ const Index = () => {
       <Hero />
       <About />
       <Collections />
-      <GiftClouds />
       <ValuesSection />
       <CTASection />
       <Footer />

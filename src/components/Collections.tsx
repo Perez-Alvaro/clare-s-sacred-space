@@ -7,6 +7,8 @@ import macrameImg from '@/assets/macrame.jpg';
 import canastaImg from '@/assets/canasta.jpg';
 import centroMesaImg from '@/assets/centroMesa.jpg';
 import macetaImg from '@/assets/maceta.jpg';
+import borlasImg from '@/assets/borlas.jpeg';
+import borlasTotoraImg from '@/assets/borlasTotora.jpeg';
 
 const Collections = () => {
   const collections = [
@@ -14,36 +16,49 @@ const Collections = () => {
       title: 'Oratorios de Bolsillo',
       description: 'Pequeños espacios sagrados para llevar la oración contigo. Cada oratorio es un refugio portátil de paz.',
       image: oratorioImg,
+      link: '#oratorios'
     },
     {
-      title: 'Canastas Kraft',
-      description: 'Creadas con diseño artesanal y simplicidad cálida. Son un abrazo práctico para tus objetos cotidianos, acompañando momentos de silencio, hogar y presencia.',
-      image: kraftImg,
-    },
-    {
-      title: 'Llaveros Devocionales',
+      title: 'Llaveros multimedallas',
       description: 'Medallas y símbolos que te acompañan cada día. Pequeños recordatorios de fe en cada paso.',
       image: llaveroImg,
+      link: '#llaveros'
     },
     {
-      title: 'Tejidos de Macramé',
+      title: 'Telares en Macramé',
       description: 'Objetos tejidos a mano con intención. Cada nudo es una oración, cada hilo una conexión.',
       image: macrameImg,
+      link: '#telares'
     },
     {
-      title: 'Canastas de Macramé',
+      title: 'Canastas a Crochet',
       description: 'Tejidas con manos pacientes y corazón orante. Cada nudo sostiene historia y propósito. Perfectas para acompañar tus espacios con belleza, orden y calidez contemplativa.',
       image: canastaImg,
+      link: '#canastas'
     },
     {
       title: 'Centros de mesa',
       description: 'Detalles que transforman el espacio. Cada pieza invita a la quietud, a la belleza sencilla y al encuentro con lo sagrado que habita en lo cotidiano.',
       image: centroMesaImg,
+      link: '#centros-mesa'
     },
     {
-      title: 'Sostenedores de macetas en macramé',
+      title: 'Portamacetas a Macramé',
       description: 'Tejidos que elevan y sostienen. Un recordatorio de que la vida crece mejor cuando está sostenida por amor, luz y raíces profundas.',
       image: macetaImg,
+      link: '#portamacetas'
+    },
+    {
+      title: 'Borlas de totora',
+      description: 'Borlas tejidas con intención. Cada nudo es una oración, cada hilo una conexión.',
+      image: borlasTotoraImg,
+      link: '#borlas-totora'
+    },
+    {
+      title: 'Borlas de hilo de seda',
+      description: 'Borlas tejidas con intención. Cada nudo es una oración, cada hilo una conexión.',
+      image: borlasImg,
+      link: '#borlas-seda'
     },
   ];
 
