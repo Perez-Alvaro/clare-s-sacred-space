@@ -28,17 +28,17 @@ const Hero = () => {
           </p>
 
           <h1 className="mb-6 animate-fade-in-up delay-200">
-            CLARE
+            Donde la oración toma forma
           </h1>
 
           <p className="text-xl md:text-2xl mb-4 leading-relaxed animate-fade-in-up delay-300"
             style={{ color: 'hsl(var(--soft-brown))' }}>
-            Productos hechos con manos pacientes y corazón orante.
+            Objetos contemplativos tejidos con fe franciscana.
           </p>
 
           <p className="text-lg mb-12 animate-fade-in-up delay-400"
             style={{ color: 'hsl(var(--earth))' }}>
-            Regalos que acompañan el camino espiritual, tejidos con fe y amor artesanal
+            Cada pieza es un gesto de acompañamiento en tu camino espiritual.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-500">
@@ -54,7 +54,7 @@ const Hero = () => {
                 }
               }}
             >
-              Ver catálogo
+              Explorar con calma
               <ArrowRight size={20} />
             </button>
             <a
@@ -67,6 +67,11 @@ const Hero = () => {
               <ArrowRight size={20} />
             </a>
           </div>
+
+          <p className="mt-6 text-sm animate-fade-in-up delay-600"
+            style={{ color: 'hsl(var(--soft-brown))' }}>
+            Creaciones contemplativas para tu refugio espiritual
+          </p>
         </div>
       </div>
 

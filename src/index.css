@@ -11,57 +11,66 @@
 
 @layer base {
   :root {
-    /* PALETA FRANCISCANA / CAPUCHINA */
-    --cream: 39 44% 93%;           /* #F8F1E9 - Crema base */
-    --warm-white: 48 100% 99%;     /* #FFFDF8 - Blanco cálido */
-    --sand: 42 38% 84%;            /* #E8DCC3 - Arena */
-    --soft-brown: 30 28% 48%;      /* #9C7A56 - Marrón suave */
-    --earth: 30 29% 42%;           /* #8B6A4E - Tierra */
-    --terracotta: 19 42% 56%;      /* #C17F5A - Terracota (acento) */
-    --olive: 80 17% 48%;           /* #7A8A63 - Verde olivo (acento) */
-    
+    /* PALETA FRANCISCANA / CAPUCHINA - Updated */
+    --cream: 39 44% 93%;
+    /* #F8F1E9 - Crema base (keeping original) */
+    --warm-white: 48 47% 94%;
+    /* #F5EFE7 - Blanco cálido actualizado */
+    --sand: 35 35% 80%;
+    /* #D4C4B0 - Arena/Beige claro */
+    --soft-brown: 25 35% 55%;
+    /* #B08968 - Marrón suave/Tan */
+    --earth: 20 45% 30%;
+    /* #70493C - Tierra/Chocolate medio */
+    --terracotta: 15 40% 35%;
+    /* #7D4E3B - Terracota oscuro */
+    --dark-chocolate: 20 50% 20%;
+    /* #51342A - Chocolate oscuro */
+    --olive: 80 17% 48%;
+    /* #7A8A63 - Verde olivo (keeping as accent) */
+
     /* SISTEMA DE COLOR SEMÁNTICO */
     --background: var(--cream);
     --foreground: var(--earth);
-    
+
     --card: var(--warm-white);
     --card-foreground: var(--earth);
-    
+
     --primary: var(--soft-brown);
     --primary-foreground: var(--warm-white);
-    
+
     --secondary: var(--sand);
     --secondary-foreground: var(--earth);
-    
+
     --accent: var(--terracotta);
     --accent-foreground: var(--warm-white);
-    
+
     --muted: var(--sand);
     --muted-foreground: var(--soft-brown);
-    
+
     --border: 42 25% 88%;
     --input: var(--sand);
     --ring: var(--soft-brown);
-    
+
     --radius: 12px;
-    
+
     /* ESPACIADO CONTEMPLATIVO */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 2rem;
     --spacing-lg: 4rem;
     --spacing-xl: 6rem;
-    
+
     /* TIPOGRAFÍA */
     --font-heading: 'Cormorant Garamond', serif;
     --font-body: 'Nunito', sans-serif;
     --font-script: 'Great Vibes', cursive;
-    
+
     /* SOMBRAS SUAVES */
     --shadow-sm: 0 2px 8px rgba(156, 122, 86, 0.08);
     --shadow-md: 0 4px 16px rgba(156, 122, 86, 0.12);
     --shadow-lg: 0 8px 32px rgba(156, 122, 86, 0.16);
-    
+
     /* TRANSICIONES */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -87,7 +96,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: 500;
     line-height: 1.3;
@@ -129,6 +143,7 @@
    ==================================================================== */
 
 @layer components {
+
   /* BOTONES CLARE */
   .clare-btn {
     font-family: var(--font-body);
@@ -221,6 +236,7 @@
       opacity: 0;
       transform: translateY(30px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
@@ -231,6 +247,7 @@
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
@@ -241,6 +258,7 @@
       opacity: 0;
       transform: scale(0.95);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
@@ -260,8 +278,19 @@
   }
 
   /* DELAYS PARA EFECTOS ESCALONADOS */
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
 }

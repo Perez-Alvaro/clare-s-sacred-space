@@ -4,24 +4,24 @@ import RevealOnScroll from './RevealOnScroll';
 const ValuesSection = () => {
   const values = [
     {
-      icon: <Heart size={40} />,
-      title: 'Conexión',
-      description: 'Tejemos lazos que unen corazones con la fe y el amor divino'
+      icon: <Sparkles size={40} />,
+      title: 'Presencia',
+      description: 'Objetos que te recuerdan: Dios está aquí, ahora, contigo.'
     },
     {
-      icon: <Sparkles size={40} />,
-      title: 'Fe',
-      description: 'Cada pieza lleva consigo una oración y una bendición silenciosa'
+      icon: <Heart size={40} />,
+      title: 'Oración',
+      description: 'Cada pieza lleva consigo una bendición silenciosa, tejida con fe.'
     },
     {
       icon: <Users size={40} />,
-      title: 'Amistad',
-      description: 'Regalos que fortalecen los vínculos más importantes de la vida'
+      title: 'Comunión',
+      description: 'Regalos que fortalecen lazos y celebran el amor que nos une.'
     },
     {
       icon: <Compass size={40} />,
-      title: 'Propósito',
-      description: 'Acompañamos tu camino espiritual con objetos llenos de significado'
+      title: 'Camino',
+      description: 'Compañeros silenciosos que acompañan tu peregrinaje espiritual.'
     }
   ];
 
@@ -77,9 +77,8 @@ const ValuesSection = () => {
         <RevealOnScroll delay={400}>
           <div className="mt-16 text-center max-w-3xl mx-auto">
             <p className="text-lg leading-relaxed italic" style={{ color: 'hsl(var(--soft-brown))' }}>
-              "Cada hilo tejido, cada cuenta ensartada, cada pieza creada lleva consigo
-              una intención: acompañarte en tu camino de fe, ser un recordatorio silencioso
-              del amor de Jesús en cada momento."
+              «Cada hilo tejido, cada cuenta ensartada, cada pieza creada lleva consigo una intención:
+              acompañarte en tu camino de fe, ser un recordatorio silencioso del amor de Jesús en cada momento.»
             </p>
           </div>
         </RevealOnScroll>

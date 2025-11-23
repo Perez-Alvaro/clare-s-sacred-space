@@ -16,9 +16,9 @@ const GiftClouds = () => {
               <h2 className="mb-6">Nubes de Regalo</h2>
               <p className="text-lg max-w-2xl mx-auto leading-relaxed"
                 style={{ color: 'hsl(var(--soft-brown))' }}>
-                Una forma especial de regalar con intención. Las Nubes de Regalo son
-                selecciones curadas de nuestras piezas más significativas, listas para
-                entregar amor y fe.
+                Una forma contemplativa de regalar con intención. Cada Nube de Regalo es una
+                selección curada de piezas significativas, lista para bendecir el camino de
+                quienes amas con fe y belleza.
               </p>
             </div>
           </RevealOnScroll>
@@ -28,18 +28,18 @@ const GiftClouds = () => {
             {[
               {
                 icon: <Heart size={32} />,
-                title: 'Con amor',
-                description: 'Cada nube está preparada con cuidado y devoción'
+                title: 'Con Amor',
+                description: 'Cada nube está preparada como un gesto de oración y devoción.'
               },
               {
                 icon: <Gift size={32} />,
-                title: 'Lista para regalar',
-                description: 'Empaquetada de forma hermosa y contemplativa'
+                title: 'Lista para Regalar',
+                description: 'Empaquetada con belleza contemplativa, lista para acompañar.'
               },
               {
                 icon: <Sparkles size={32} />,
-                title: 'Momentos especiales',
-                description: 'Perfecta para acompañar fechas importantes'
+                title: 'Momentos Especiales',
+                description: 'Perfecta para celebrar con fe los momentos importantes de la vida.'
               }
             ].map((item, index) => (
               <RevealOnScroll key={item.title} delay={(index + 1) * 100}>
@@ -55,7 +55,7 @@ const GiftClouds = () => {
                   <h3 className="text-xl mb-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>
                     {item.title}
                   </h3>
-                  <p className="text-sm" style={{ color: 'hsl(var(--soft-brown))' }}>
+                  <p className="text-sm leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
                     {item.description}
                   </p>
                 </div>
@@ -71,11 +71,11 @@ const GiftClouds = () => {
                   Ver Nubes Disponibles
                 </button>
                 <button className="clare-btn clare-btn-secondary">
-                  Personalizar una Nube
+                  Crear una Nube Personalizada
                 </button>
               </div>
               <p className="mt-6 text-sm" style={{ color: 'hsl(var(--soft-brown))' }}>
-                También puedes contactarnos para crear una nube personalizada
+                También puedes contactarnos para co-crear una nube única y personal
               </p>
             </div>
           </RevealOnScroll>

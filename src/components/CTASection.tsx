@@ -18,36 +18,50 @@ const CTASection = () => {
 
       <div className="clare-container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Contenido principal */}
+
+          {/* Quote Clare */}
           <RevealOnScroll>
+            <p
+              className="text-2xl md:text-3xl mb-8 font-light italic leading-relaxed"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                color: 'hsl(var(--warm-white))'
+              }}
+            >
+              "O todo o nada"
+              <br />
+              <span className="text-lg">— Clare Crockett</span>
+            </p>
+          </RevealOnScroll>
+
+          {/* Contenido principal */}
+          <RevealOnScroll delay={100}>
             <div className="mb-12">
-              <p
-                className="text-2xl md:text-3xl mb-6 font-light leading-relaxed"
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  color: 'hsl(var(--warm-white))'
-                }}
-              >
-                "o todo o nada" - Clare Crockett.
-              </p>
               <h2
                 className="mb-6 text-4xl md:text-5xl"
                 style={{ color: 'hsl(var(--warm-white))' }}
               >
-                Queremos formar parte de tu camino.
+                La belleza nace de la entrega
               </h2>
+              <p
+                className="text-lg max-w-2xl mx-auto leading-relaxed mb-4"
+                style={{ color: 'hsl(var(--warm-white))' }}
+              >
+                Como Clare nos enseñó, el amor no conoce medias tintas.
+              </p>
               <p
                 className="text-lg max-w-2xl mx-auto leading-relaxed"
                 style={{ color: 'hsl(var(--warm-white))' }}
               >
-                Descubrí piezas únicas creadas con amor franciscano.
-                Cada objeto es una invitación a la contemplación y la conexión espiritual.
+                Cada objeto que creamos es una oración silenciosa, un recordatorio de lo sagrado
+                que habita en lo cotidiano. Queremos formar parte de tu camino —acompañarte con
+                belleza, con fe, con piezas que oran contigo cuando las palabras faltan.
               </p>
             </div>
           </RevealOnScroll>
 
           {/* Botones de acción */}
-          <RevealOnScroll delay={100}>
+          <RevealOnScroll delay={200}>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
               <button
                 className="group px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-3"
@@ -79,12 +93,12 @@ const CTASection = () => {
           </RevealOnScroll>
 
           {/* Mensaje final */}
-          <RevealOnScroll delay={200}>
+          <RevealOnScroll delay={300}>
             <p
               className="text-sm"
               style={{ color: 'hsl(var(--warm-white))' }}
             >
-              También puedes seguirnos en redes sociales para ver nuestras últimas creaciones
+              También podés seguirnos en redes para ver nuestras últimas creaciones
             </p>
           </RevealOnScroll>
         </div>

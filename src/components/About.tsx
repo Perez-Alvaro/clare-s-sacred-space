@@ -16,74 +16,58 @@ const About = () => {
             </div>
           </RevealOnScroll>
 
-          {/* Contenido en dos columnas */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Contenido narrativo */}
+          <RevealOnScroll delay={100}>
+            <div className="mb-12">
+              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
+                Esta obra nace inspirada en la vida de <strong>la hermana Clare Crockett</strong> (1982-2016),
+                una mujer cuya alegría era contagiosa, cuya entrega era total, y cuyo amor a Cristo no conocía
+                medias tintas. Su frase de vida —<em>"O todo o nada"</em>— se convirtió en luz para miles,
+                y hoy sostiene cada puntada que tejemos.
+              </p>
+              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
+                En 2025, su causa de beatificación fue oficialmente abierta por la Iglesia, siendo declarada
+                <strong> Sierva de Dios</strong>. Su testimonio no es historia: es invitación viva.
+              </p>
+            </div>
+          </RevealOnScroll>
 
-            {/* Columna de texto 1 */}
-            <RevealOnScroll delay={100}>
-              <div>
-                <h3 className="text-2xl mb-4" style={{ color: 'hsl(var(--earth))' }}>
-                  Un camino de fe
-                </h3>
-                <p className="mb-4 leading-relaxed">
-                  Esta obra nace inspirada en la vida de <strong>la hermana Clare Crockett</strong>
-                  (1982–2016), reconocida por su alegría, entrega total y profundo amor a Cristo.
-                  Su frase de vida <em>“Todo o nada”</em> se convirtió en guía y luz para muchos.
-                </p>
-                <p className="leading-relaxed">
-                  En 2025 su causa de beatificación fue oficialmente abierta por la Iglesia,
-                  siendo declarada <strong>Sierva de Dios</strong>, confirmando su testimonio como
-                  ejemplo para nuestro tiempo.
-                </p>
-              </div>
-            </RevealOnScroll>
+          {/* Misión */}
+          <RevealOnScroll delay={200}>
+            <div className="mb-12">
+              <h3 className="text-2xl mb-6 font-medium text-center" style={{ color: 'hsl(var(--earth))' }}>
+                Lo que hacemos no son solo objetos. Son gestos de fe.
+              </h3>
+              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
+                Cada oratorio de bolsillo, cada llavero multimedallas, cada pieza tejida en macramé lleva consigo
+                una intención silenciosa: acompañarte cuando necesitas recordar que no estás solo. Que Dios camina
+                contigo. Que la belleza también es oración.
+              </p>
+              <p className="leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
+                Como Clare ofreció su vida completamente —sin reservas, sin medias tintas— nosotros ofrecemos
+                nuestra artesanía del mismo modo: con entrega total, belleza auténtica, y el deseo profundo de
+                que cada pieza sea, para ti, un refugio portátil de paz.
+              </p>
+            </div>
+          </RevealOnScroll>
 
-            {/* Columna de texto 2 */}
-            <RevealOnScroll delay={200}>
-              <div>
-                <h3 className="text-2xl mb-4" style={{ color: 'hsl(var(--earth))' }}>
-                  Misión artesanal
-                </h3>
-                <p className="mb-4 leading-relaxed">
-                  Lo que hacemos no son solo objetos: son gestos de fe. Cada pieza está pensada
-                  como un recordatorio silencioso del amor de Dios, del servicio sencillo,
-                  y del camino espiritual que la hermana Clare vivió con tanta autenticidad.
-                </p>
-                <p className="leading-relaxed">
-                  Así como ella ofreció su vida completamente, cada creación busca transmitir
-                  esperanza, belleza y una invitación al encuentro con Dios en lo cotidiano:
-                  oración, entrega, alegría y propósito.
-                </p>
-              </div>
-            </RevealOnScroll>
-          </div>
-
-          {/* Valores */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { label: 'Conexión' },
-              { label: 'Fe' },
-              { label: 'Amistad' },
-              { label: 'Propósito' }
-            ].map((value, index) => (
-              <RevealOnScroll
-                key={value.label}
-                delay={(index + 3) * 100}
-                className="h-full"
-              >
-                <div
-                  className="text-center p-6 rounded-lg transition-all duration-300 hover:shadow-md h-full flex items-center justify-center"
-                  style={{
-                    backgroundColor: 'hsl(var(--sand))',
-                  }}
-                >
-                  <p className="font-semibold text-lg" style={{ color: 'hsl(var(--earth))' }}>
-                    {value.label}
-                  </p>
-                </div>
-              </RevealOnScroll>
-            ))}
-          </div>
+          {/* Pull Quote */}
+          <RevealOnScroll delay={300}>
+            <div
+              className="p-6 rounded-lg border-l-4 italic text-center"
+              style={{
+                backgroundColor: 'hsl(var(--sand))',
+                borderColor: 'hsl(var(--terracotta))'
+              }}
+            >
+              <p className="text-xl font-light" style={{ color: 'hsl(var(--earth))' }}>
+                "O todo o nada"
+              </p>
+              <p className="text-sm mt-2" style={{ color: 'hsl(var(--soft-brown))' }}>
+                — Clare Crockett
+              </p>
+            </div>
+          </RevealOnScroll>
 
         </div>
       </div>
