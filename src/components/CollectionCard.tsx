@@ -11,7 +11,7 @@ interface CollectionCardProps {
 const CollectionCard = ({ title, description, image, link, delay = '0ms' }: CollectionCardProps) => {
   return (
     <div
-      className="clare-card group cursor-pointer animate-fade-in-up"
+      className="clare-card group cursor-pointer animate-fade-in-up h-full flex flex-col"
       style={{ animationDelay: delay }}
     >
       {/* Imagen */}
@@ -29,11 +29,11 @@ const CollectionCard = ({ title, description, image, link, delay = '0ms' }: Coll
       </div>
 
       {/* Contenido */}
-      <div>
+      <div className="flex flex-col flex-1">
         <h3 className="text-2xl mb-3 font-medium" style={{ color: 'hsl(var(--earth))' }}>
           {title}
         </h3>
-        <p className="mb-6 leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
+        <p className="mb-6 leading-relaxed flex-1" style={{ color: 'hsl(var(--soft-brown))' }}>
           {description}
         </p>
 

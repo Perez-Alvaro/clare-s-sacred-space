@@ -13,49 +13,49 @@ const Collections = () => {
   const collections = [
     {
       title: 'Oratorios de Bolsillo',
-      description: 'Refugios portátiles de paz. Espacios íntimos donde tu corazón encuentra silencio y la presencia de Dios se hace compañía en medio del día.',
+      description: 'Es un pequeño objeto portátil pensado para crear un instante íntimo de recogimiento en medio de la vida diaria. Es como llevar un mini refugio simbólico siempre a mano: un espacio interior reducido a su mínima expresión, pero lleno de sentido.',
       image: oratorioImg,
       link: '#oratorios'
     },
     {
       title: 'Llaveros Multimedallas',
-      description: 'Medallas bendecidas que te acompañan en cada paso. Pequeños recordatorios de que no caminas solo: la fe va contigo, siempre.',
+      description: 'Tejidos con hilo de seda, que contienen 6 medallas variadas, entre ellas de la Sagrada Familia, Espíritu Santo, Sagrado Corazón de Jesús, Rostro de Jesús, Virgen del Escapulario, Virgen de Luján, Cruz. Un detalle que te recuerda que no caminas solo!',
       image: llaveroImg,
       link: '#llaveros'
     },
     {
       title: 'Telares en Macramé',
-      description: 'Tejidos contemplativos donde cada nudo es una oración, cada hilo una conexión. Objetos que invitan a la quietud y la contemplación.',
+      description: 'Tejidos a mano, en tronco natural. Un objeto de decoración para tus espacios, que te invitan a la contemplación y a la calma.',
       image: macrameImg,
       link: '#telares'
     },
     {
       title: 'Canastas a Crochet',
-      description: 'Tejidas con manos pacientes y corazón orante. Cada punto sostiene historia, propósito y belleza. Elementos que ordenan tu espacio con calidez contemplativa.',
+      description: 'Tejidas con cordón de algodón, sobre una base de MDF pintada. Pensada para decorar tu mesa o colocar el equipo de mate.',
       image: canastaImg,
       link: '#canastas'
     },
     {
       title: 'Centros de Mesa',
-      description: 'Detalles que transforman lo ordinario en sagrado. Cada pieza invita a la pausa, a la belleza sencilla, al encuentro con Dios en lo cotidiano.',
+      description: 'Tejidos a mano, en hilo macramé o papel Kraft, pensado para darle un toque distinto a tus espacios.',
       image: centroMesaImg,
       link: '#centros-mesa'
     },
     {
       title: 'Portamacetas a Macramé',
-      description: 'Tejidos que elevan y sostienen. Un recordatorio de que toda vida crece mejor cuando está sostenida por amor, luz y raíces profundas.',
+      description: 'Pensado para colocar tus macetas y revestir cada espacio con naturaleza.',
       image: macetaImg,
       link: '#portamacetas'
     },
     {
       title: 'Borlas de Totora',
-      description: 'Fibras naturales tejidas con intención devocional. Cada borla es un gesto de belleza artesanal que agrega calidez contemplativa a tus espacios.',
+      description: 'Tejidas a crochet en distintos colores, con detalles en bolas de madera, y distintas medallas. Pensadas darle a tus puertas, un detalle único.',
       image: borlasTotoraImg,
       link: '#borlas-totora'
     },
     {
       title: 'Borlas de Hilo de Seda',
-      description: 'Sedas delicadas anudadas con oración. Elementos de belleza suave que acompañan tus momentos con elegancia franciscana.',
+      description: 'Tejidas a mano sobre un aro de madera, en distintos colores, con detalles colgantes de madera, y una medalla. Pensadas darle a tus puertas, un detalle único.',
       image: borlasImg,
       link: '#borlas-seda'
     },
@@ -70,8 +70,7 @@ const Collections = () => {
             <p className="clare-script mb-4">Nuestras creaciones</p>
             <h2 className="mb-6">Colecciones</h2>
             <p className="max-w-2xl mx-auto text-lg leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
-              Cada pieza es única, creada con amor y dedicación contemplativa.
-              Más que objetos, son gestos de fe tejidos a mano.
+              Cada pieza es única, creada artesanalmente con amor y dedicación.
             </p>
           </div>
         </RevealOnScroll>

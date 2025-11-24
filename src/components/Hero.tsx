@@ -28,17 +28,12 @@ const Hero = () => {
           </p>
 
           <h1 className="mb-6 animate-fade-in-up delay-200">
-            Donde la oración toma forma
+            Cuando la luz interior se vuelve creación
           </h1>
 
-          <p className="text-xl md:text-2xl mb-4 leading-relaxed animate-fade-in-up delay-300"
+          <p className="text-xl md:text-2xl mb-12 leading-relaxed animate-fade-in-up delay-300"
             style={{ color: 'hsl(var(--soft-brown))' }}>
-            Objetos contemplativos tejidos con fe franciscana.
-          </p>
-
-          <p className="text-lg mb-12 animate-fade-in-up delay-400"
-            style={{ color: 'hsl(var(--earth))' }}>
-            Cada pieza es un gesto de acompañamiento en tu camino espiritual.
+            Es donde la oración toma forma.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-500">
@@ -67,11 +62,6 @@ const Hero = () => {
               <ArrowRight size={20} />
             </a>
           </div>
-
-          <p className="mt-6 text-sm animate-fade-in-up delay-600"
-            style={{ color: 'hsl(var(--soft-brown))' }}>
-            Creaciones contemplativas para tu refugio espiritual
-          </p>
         </div>
       </div>
 

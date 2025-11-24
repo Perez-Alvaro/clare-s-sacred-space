@@ -23,12 +23,11 @@ const Footer = () => {
               className="text-sm leading-relaxed mb-6"
               style={{ color: 'hsl(var(--sand))' }}
             >
-              Artes con propósito, camino y oración.
-              Creando objetos devocionales que acompañan tu camino espiritual.
+              Cuando la luz interior se vuelve creación; es donde la oración toma forma
             </p>
             <p
               className="clare-script text-lg"
-              style={{ color: 'hsl(var(--terracotta))' }}
+              style={{ color: 'hsl(var(--warm-white))' }}
             >
               Fe que se teje en cada detalle
             </p>
@@ -43,7 +42,7 @@ const Footer = () => {
               Explora
             </h4>
             <ul className="space-y-3">
-              {['Colecciones', 'Nubes de Regalo', 'Nuestra Historia', 'Contacto'].map((item) => (
+              {['Colecciones', 'Nuestra Historia', 'Contacto'].map((item) => (
                 <li key={item}>
                   <a
                     href={`#${item.toLowerCase().replace(' ', '-')}`}
@@ -79,7 +78,7 @@ const Footer = () => {
             </div>
 
             {/* Redes sociales */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <a
                 href="https://www.instagram.com/clare.hm_/"
                 target="_blank"
@@ -93,6 +92,7 @@ const Footer = () => {
               >
                 <Instagram size={22} />
               </a>
+              <span className="text-sm" style={{ color: 'hsl(var(--sand))' }}>@clare.hm_</span>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ const Footer = () => {
             style={{ color: 'hsl(var(--sand))' }}
           >
             Hecho con
-            <Heart size={16} style={{ color: 'hsl(var(--terracotta))' }} fill="currentColor" />
+            <Heart size={16} style={{ color: 'hsl(var(--warm-white))' }} fill="currentColor" />
             y devoción
           </p>
         </div>

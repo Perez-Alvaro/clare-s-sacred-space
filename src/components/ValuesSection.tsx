@@ -4,25 +4,20 @@ import RevealOnScroll from './RevealOnScroll';
 const ValuesSection = () => {
   const values = [
     {
-      icon: <Sparkles size={40} />,
-      title: 'Presencia',
-      description: 'Objetos que te recuerdan: Dios está aquí, ahora, contigo.'
-    },
-    {
       icon: <Heart size={40} />,
       title: 'Oración',
-      description: 'Cada pieza lleva consigo una bendición silenciosa, tejida con fe.'
+      description: 'Cada pieza lleva consigo una bendición silenciosa.'
+    },
+    {
+      icon: <Sparkles size={40} />,
+      title: 'Presencia',
+      description: 'Objetos que te invitan a detenerte y estar en el aquí y ahora..'
     },
     {
       icon: <Users size={40} />,
-      title: 'Comunión',
-      description: 'Regalos que fortalecen lazos y celebran el amor que nos une.'
+      title: 'Encuentro',
+      description: 'Gestos que fortalecen la conexión con quienes querés..'
     },
-    {
-      icon: <Compass size={40} />,
-      title: 'Camino',
-      description: 'Compañeros silenciosos que acompañan tu peregrinaje espiritual.'
-    }
   ];
 
   return (
@@ -39,7 +34,7 @@ const ValuesSection = () => {
         </RevealOnScroll>
 
         {/* Grid de valores */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {values.map((value, index) => (
             <RevealOnScroll key={value.title} delay={index * 100}>
               <div
@@ -72,16 +67,6 @@ const ValuesSection = () => {
             </RevealOnScroll>
           ))}
         </div>
-
-        {/* Mensaje adicional */}
-        <RevealOnScroll delay={400}>
-          <div className="mt-16 text-center max-w-3xl mx-auto">
-            <p className="text-lg leading-relaxed italic" style={{ color: 'hsl(var(--soft-brown))' }}>
-              «Cada hilo tejido, cada cuenta ensartada, cada pieza creada lleva consigo una intención:
-              acompañarte en tu camino de fe, ser un recordatorio silencioso del amor de Jesús en cada momento.»
-            </p>
-          </div>
-        </RevealOnScroll>
       </div>
     </section>
   );

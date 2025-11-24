@@ -19,21 +19,6 @@ const CTASection = () => {
       <div className="clare-container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
 
-          {/* Quote Clare */}
-          <RevealOnScroll>
-            <p
-              className="text-2xl md:text-3xl mb-8 font-light italic leading-relaxed"
-              style={{
-                fontFamily: 'var(--font-heading)',
-                color: 'hsl(var(--warm-white))'
-              }}
-            >
-              "O todo o nada"
-              <br />
-              <span className="text-lg">— Clare Crockett</span>
-            </p>
-          </RevealOnScroll>
-
           {/* Contenido principal */}
           <RevealOnScroll delay={100}>
             <div className="mb-12">
@@ -43,19 +28,14 @@ const CTASection = () => {
               >
                 La belleza nace de la entrega
               </h2>
-              <p
-                className="text-lg max-w-2xl mx-auto leading-relaxed mb-4"
-                style={{ color: 'hsl(var(--warm-white))' }}
-              >
-                Como Clare nos enseñó, el amor no conoce medias tintas.
-              </p>
+              
               <p
                 className="text-lg max-w-2xl mx-auto leading-relaxed"
                 style={{ color: 'hsl(var(--warm-white))' }}
               >
-                Cada objeto que creamos es una oración silenciosa, un recordatorio de lo sagrado
-                que habita en lo cotidiano. Queremos formar parte de tu camino —acompañarte con
-                belleza, con fe, con piezas que oran contigo cuando las palabras faltan.
+                Como Clare ofreció su vida completamente —sin reservas, sin medias tintas— nosotros ofrecemos
+                nuestra artesanía del mismo modo: con entrega total, belleza auténtica, y el deseo profundo de
+                que cada pieza sea, para ti, un refugio portátil de paz.
               </p>
             </div>
           </RevealOnScroll>
@@ -76,7 +56,7 @@ const CTASection = () => {
               </button>
 
               <a
-                href="https://wa.me/5493534259493"
+                href="https://wa.me/3534259493"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-3"

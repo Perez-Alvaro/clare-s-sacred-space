@@ -1,4 +1,5 @@
 import RevealOnScroll from './RevealOnScroll';
+import clareProfile from '@/assets/clare-profile.png';
 
 const About = () => {
   return (
@@ -13,6 +14,16 @@ const About = () => {
               <h2 className="mb-6">Inspirados por CLARE</h2>
               <div className="w-20 h-1 mx-auto"
                 style={{ backgroundColor: 'hsl(var(--terracotta))' }} />
+
+              {/* Clare's Profile Photo */}
+              <div className="mt-12 flex justify-center">
+                <img
+                  src={clareProfile}
+                  alt="Clare Crockett"
+                  className="w-48 h-48 rounded-full object-cover shadow-md border-2"
+                  style={{ borderColor: 'hsl(var(--sand))' }}
+                />
+              </div>
             </div>
           </RevealOnScroll>
 
@@ -36,7 +47,7 @@ const About = () => {
           <RevealOnScroll delay={200}>
             <div className="mb-12">
               <h3 className="text-2xl mb-6 font-medium text-center" style={{ color: 'hsl(var(--earth))' }}>
-                Lo que hacemos no son solo objetos. Son gestos de fe.
+                Lo que hacemos no son solo objetos. Son detalles que abrazan.
               </h3>
               <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
                 Cada oratorio de bolsillo, cada llavero multimedallas, cada pieza tejida en macramé lleva consigo
