@@ -3,7 +3,7 @@ import clareProfile from '@/assets/clare-profile.png';
 
 const About = () => {
   return (
-    <section className="clare-section" style={{ backgroundColor: 'hsl(var(--warm-white))' }}>
+    <section className="clare-section" id="historia" style={{ backgroundColor: 'hsl(var(--warm-white))' }}>
       <div className="clare-container">
         <div className="max-w-4xl mx-auto">
 

@@ -42,19 +42,41 @@ const Footer = () => {
               Explora
             </h4>
             <ul className="space-y-3">
-              {['Colecciones', 'Nuestra Historia', 'Contacto'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase().replace(' ', '-')}`}
-                    className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
-                    style={{
-                      color: 'hsl(var(--sand))',
-                    }}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="#colecciones"
+                  className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
+                  style={{
+                    color: 'hsl(var(--sand))',
+                  }}
+                >
+                  Colecciones
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#historia"
+                  className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
+                  style={{
+                    color: 'hsl(var(--sand))',
+                  }}
+                >
+                  Nuestra Historia
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/3534259493"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
+                  style={{
+                    color: 'hsl(var(--sand))',
+                  }}
+                >
+                  Contacto
+                </a>
+              </li>
             </ul>
           </div>
 

@@ -53,7 +53,7 @@ const Hero = () => {
               <ArrowRight size={20} />
             </button>
             <a
-              href="https://www.tiendanube.com"
+              href="https://clare3.mitiendanube.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="clare-btn clare-btn-secondary w-full sm:w-auto"

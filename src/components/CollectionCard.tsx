@@ -10,8 +10,9 @@ interface CollectionCardProps {
 
 const CollectionCard = ({ title, description, image, link, delay = '0ms' }: CollectionCardProps) => {
   return (
-    <div
-      className="clare-card group cursor-pointer animate-fade-in-up h-full flex flex-col"
+    <a
+      href={link || '#'}
+      className="clare-card group cursor-pointer animate-fade-in-up h-full flex flex-col no-underline"
       style={{ animationDelay: delay }}
     >
       {/* Imagen */}
@@ -38,16 +39,15 @@ const CollectionCard = ({ title, description, image, link, delay = '0ms' }: Coll
         </p>
 
         {/* Botón */}
-        <a
-          href={link || '#'}
+        <span
           className="inline-flex items-center gap-2 font-medium transition-all duration-300 group-hover:gap-4"
           style={{ color: 'hsl(var(--terracotta))' }}
         >
           Ver productos
           <ArrowRight size={18} />
-        </a>
+        </span>
       </div>
-    </div>
+    </a>
   );
 };
 
