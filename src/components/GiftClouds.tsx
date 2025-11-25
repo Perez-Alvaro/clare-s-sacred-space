@@ -46,7 +46,7 @@ const GiftClouds = () => {
                   3 imágenes de santos
                 </p>
                 <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSehR1R0vZMskLULRo78L6i2G-X0DAQCp8IE3tkIu1wx7DsdfQ/viewform?usp=dialog"
+                  href="https://forms.gle/Zc8uefu567Ni8rNs8"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="clare-btn clare-btn-primary w-full active:scale-95"
@@ -70,7 +70,7 @@ const GiftClouds = () => {
                   4 imágenes de santos
                 </p>
                 <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSf6FjFm8A5hxUgtXkjJdRZVU4dfnEHdUdXvnAJgeI7ruNmpqA/viewform?usp=publish-editor"
+                  href="https://forms.gle/8E3v5YHDV3h2U5ju8"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="clare-btn clare-btn-secondary w-full active:scale-95"
