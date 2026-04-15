@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import heroImage from '@/assets/hero-image.png';
 
 const Hero = () => {
@@ -37,30 +38,20 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-500">
+            <Link to="/tienda" className="clare-btn clare-btn-primary w-full sm:w-auto">
+              Ver Tienda
+              <ArrowRight size={20} />
+            </Link>
             <button
-              className="clare-btn clare-btn-primary w-full sm:w-auto"
+              className="clare-btn clare-btn-secondary w-full sm:w-auto"
               onClick={() => {
-                const collectionsSection = document.getElementById('colecciones');
-                if (collectionsSection) {
-                  collectionsSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }
+                const el = document.getElementById('colecciones');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
             >
               Explorar con calma
               <ArrowRight size={20} />
             </button>
-            <a
-              href="https://clare3.mitiendanube.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="clare-btn clare-btn-secondary w-full sm:w-auto"
-            >
-              Ver en Tienda Nube
-              <ArrowRight size={20} />
-            </a>
           </div>
         </div>
       </div>
