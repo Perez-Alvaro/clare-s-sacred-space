@@ -17,12 +17,12 @@ const AdminOrders = () => {
   useEffect(() => { fetchOrders(); }, []);
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from('orders').update({ status }).eq('id', id);
+    await supabase.from('orders').update({ status: status as any }).eq('id', id);
     fetchOrders();
   };
 
   const updatePaymentStatus = async (id: string, payment_status: string) => {
-    await supabase.from('orders').update({ payment_status }).eq('id', id);
+    await supabase.from('orders').update({ payment_status: payment_status as any }).eq('id', id);
     fetchOrders();
   };
 
