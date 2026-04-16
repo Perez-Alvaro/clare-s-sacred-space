@@ -95,6 +95,45 @@ export type Database = {
         }
         Relationships: []
       }
+      discounts: {
+        Row: {
+          created_at: string
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          name: string
+          percentage: number
+          starts_at: string | null
+          target_id: string
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          percentage?: number
+          starts_at?: string | null
+          target_id: string
+          type: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          percentage?: number
+          starts_at?: string | null
+          target_id?: string
+          type?: Database["public"]["Enums"]["discount_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           content: string | null
@@ -273,6 +312,76 @@ export type Database = {
           },
         ]
       }
+      product_variant_options: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          price_modifier: number
+          sort_order: number | null
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          price_modifier?: number
+          sort_order?: number | null
+          variant_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          price_modifier?: number
+          sort_order?: number | null
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variant_options_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_variants: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          product_id: string
+          sort_order: number | null
+          type: Database["public"]["Enums"]["variant_type"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          product_id: string
+          sort_order?: number | null
+          type?: Database["public"]["Enums"]["variant_type"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          product_id?: string
+          sort_order?: number | null
+          type?: Database["public"]["Enums"]["variant_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category_id: string | null
@@ -379,6 +488,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "staff"
+      discount_type: "category" | "product"
       order_status:
         | "pending"
         | "confirmed"
@@ -388,6 +498,7 @@ export type Database = {
         | "cancelled"
       payment_method: "bank_transfer" | "cash_on_delivery"
       payment_status: "pending" | "confirmed" | "refunded"
+      variant_type: "single_choice" | "multiple_choice"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -516,6 +627,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "staff"],
+      discount_type: ["category", "product"],
       order_status: [
         "pending",
         "confirmed",
@@ -526,6 +638,7 @@ export const Constants = {
       ],
       payment_method: ["bank_transfer", "cash_on_delivery"],
       payment_status: ["pending", "confirmed", "refunded"],
+      variant_type: ["single_choice", "multiple_choice"],
     },
   },
 } as const
