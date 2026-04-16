@@ -1,9 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
-import Collections from '@/components/Collections';
-import GiftClouds from '@/components/GiftClouds';
-import ValuesSection from '@/components/ValuesSection';
+import NewsSection from '@/components/NewsSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 
@@ -12,10 +10,8 @@ const Index = () => {
     <main className="min-h-screen">
       <Navbar />
       <Hero />
+      <NewsSection />
       <About />
-      <GiftClouds />
-      <Collections />
-      <ValuesSection />
       <CTASection />
       <Footer />
     </main>

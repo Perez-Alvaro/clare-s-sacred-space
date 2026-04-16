@@ -37,21 +37,11 @@ const Hero = () => {
             Es donde la oración toma forma.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-500">
-            <Link to="/tienda" className="clare-btn clare-btn-primary w-full sm:w-auto">
-              Ver Tienda
-              <ArrowRight size={20} />
+          <div className="flex justify-center animate-fade-in-up delay-500 mt-4">
+            <Link to="/tienda" className="clare-btn clare-btn-primary w-full sm:w-auto px-10 py-4 text-xl font-medium shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 rounded-xl flex items-center justify-center">
+              Conocé nuestra tienda
+              <ArrowRight size={22} className="ml-2" />
             </Link>
-            <button
-              className="clare-btn clare-btn-secondary w-full sm:w-auto"
-              onClick={() => {
-                const el = document.getElementById('colecciones');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}
-            >
-              Explorar con calma
-              <ArrowRight size={20} />
-            </button>
           </div>
         </div>
       </div>

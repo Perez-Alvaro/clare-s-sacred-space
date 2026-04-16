@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface CollectionCardProps {
   title: string;
@@ -8,15 +9,19 @@ interface CollectionCardProps {
   delay?: string;
 }
 
-const CollectionCard = ({ title, description, image, link, delay = '0ms' }: CollectionCardProps) => {
+const CollectionCard = ({ title, description, image, link = '#', delay = '0ms' }: CollectionCardProps) => {
+  const isExternal = link.startsWith('http');
+  const Component = isExternal ? 'a' : Link;
+  const props = isExternal ? { href: link, target: '_blank', rel: 'noopener noreferrer' } : { to: link };
+  
   return (
-    <a
-      href={link || '#'}
+    <Component
+      {...(props as any)}
       className="clare-card group cursor-pointer animate-fade-in-up h-full flex flex-col no-underline"
       style={{ animationDelay: delay }}
     >
       {/* Imagen */}
-      <div className="relative overflow-hidden rounded-lg mb-6 aspect-square">
+      <div className="relative overflow-hidden rounded-lg mb-6 aspect-square bg-slate-100">
         <img
           src={image}
           alt={title}
@@ -47,7 +52,7 @@ const CollectionCard = ({ title, description, image, link, delay = '0ms' }: Coll
           <ArrowRight size={18} />
         </span>
       </div>
-    </a>
+    </Component>
   );
 };
 

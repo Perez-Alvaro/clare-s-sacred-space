@@ -3,62 +3,34 @@ import RevealOnScroll from './RevealOnScroll';
 import oratorioImg from '@/assets/oratorio.jpg';
 import llaveroImg from '@/assets/llavero.jpg';
 import macrameImg from '@/assets/macrame.jpg';
-import canastaImg from '@/assets/canasta.jpg';
-import centroMesaImg from '@/assets/centroMesa.jpg';
-import macetaImg from '@/assets/maceta.jpg';
-import borlasImg from '@/assets/borlas.jpeg';
-import borlasTotoraImg from '@/assets/borlasTotora.jpeg';
+import ora3Img from '@/assets/ora3.jpg';
 
 const Collections = () => {
   const collections = [
     {
       title: 'Oratorios de Bolsillo',
-      description: 'Es un pequeño objeto portátil pensado para crear un instante íntimo de recogimiento en medio de la vida diaria. Es como llevar un mini refugio simbólico siempre a mano: un espacio interior reducido a su mínima expresión, pero lleno de sentido.',
+      description: 'Nuestro producto destacado. Un pequeño objeto portátil pensado para crear un instante íntimo de recogimiento en medio de la vida diaria.',
       image: oratorioImg,
-      link: 'https://clare3.mitiendanube.com/oratorios-de-bolsillo/'
+      link: '/tienda'
+    },
+    {
+      title: 'Rosarios',
+      description: 'Nuestro diferencial. Creados artesanalmente para acompañar tus momentos de fe y oración profunda, con detalles que inspiran paz y belleza.',
+      image: ora3Img,
+      link: '/tienda'
     },
     {
       title: 'Llaveros Multimedallas',
-      description: 'Tejidos con hilo de seda, que contienen 6 medallas variadas, entre ellas de la Sagrada Familia, Espíritu Santo, Sagrado Corazón de Jesús, Rostro de Jesús, Virgen del Escapulario, Virgen de Luján, Cruz. Un detalle que te recuerda que no caminas solo!',
+      description: 'Tejidos con hilo de seda, contienen medallas variadas. Un detalle para llevar en el día a día y recordar que no caminas solo.',
       image: llaveroImg,
-      link: 'https://clare3.mitiendanube.com/llaveros/'
+      link: '/tienda'
     },
     {
       title: 'Telares en Macramé',
       description: 'Tejidos a mano, en tronco natural. Un objeto de decoración para tus espacios, que te invitan a la contemplación y a la calma.',
       image: macrameImg,
-      link: 'https://clare3.mitiendanube.com/telares-para-pared/'
-    },
-    {
-      title: 'Canastas a Crochet',
-      description: 'Tejidas con cordón de algodón, sobre una base de MDF pintada. Pensada para decorar tu mesa o colocar el equipo de mate.',
-      image: canastaImg,
-      link: '#canastas'
-    },
-    {
-      title: 'Centros de Mesa',
-      description: 'Tejidos a mano, en hilo macramé o papel Kraft, pensado para darle un toque distinto a tus espacios.',
-      image: centroMesaImg,
-      link: 'https://clare3.mitiendanube.com/centros-de-mesa/'
-    },
-    {
-      title: 'Portamacetas a Macramé',
-      description: 'Pensado para colocar tus macetas y revestir cada espacio con naturaleza.',
-      image: macetaImg,
-      link: 'https://clare3.mitiendanube.com/portamacetas/'
-    },
-    {
-      title: 'Borlas de Totora',
-      description: 'Tejidas a crochet en distintos colores, con detalles en bolas de madera, y distintas medallas. Pensadas darle a tus puertas, un detalle único.',
-      image: borlasTotoraImg,
-      link: 'https://clare3.mitiendanube.com/borlas/'
-    },
-    {
-      title: 'Borlas de Hilo de Seda',
-      description: 'Tejidas a mano sobre un aro de madera, en distintos colores, con detalles colgantes de madera, y una medalla. Pensadas darle a tus puertas, un detalle único.',
-      image: borlasImg,
-      link: 'https://clare3.mitiendanube.com/borlas/'
-    },
+      link: '/tienda'
+    }
   ];
 
   return (
@@ -76,7 +48,7 @@ const Collections = () => {
         </RevealOnScroll>
 
         {/* Grid de colecciones */}
-        <div className="clare-grid">
+        <div className="grid grid-cols-2 gap-4 md:gap-8">
           {collections.map((collection, index) => (
             <RevealOnScroll key={collection.title} delay={index * 100}>
               <CollectionCard

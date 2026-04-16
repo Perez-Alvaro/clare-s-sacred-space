@@ -1,4 +1,5 @@
 import { ShoppingBag, MessageCircle, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import RevealOnScroll from './RevealOnScroll';
 
 const CTASection = () => {
@@ -43,10 +44,8 @@ const CTASection = () => {
           {/* Botones de acción */}
           <RevealOnScroll delay={200}>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-              <a
-                href="https://clare3.mitiendanube.com/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/tienda"
                 className="group px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto flex items-center justify-center gap-3"
                 style={{
                   backgroundColor: 'hsl(var(--warm-white))',
@@ -56,7 +55,7 @@ const CTASection = () => {
                 <ShoppingBag size={20} />
                 Entrar a la Tienda
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
 
               <a
                 href="https://wa.me/3534259493"

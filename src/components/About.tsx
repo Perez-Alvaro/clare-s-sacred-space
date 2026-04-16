@@ -27,55 +27,48 @@ const About = () => {
             </div>
           </RevealOnScroll>
 
-          {/* Contenido narrativo */}
+          {/* Contenido resumido y tarjetas */}
           <RevealOnScroll delay={100}>
-            <div className="mb-12">
-              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
-                Esta obra nace inspirada en la vida de <strong>la hermana Clare Crockett</strong> (1982-2016),
-                una mujer cuya alegría era contagiosa, cuya entrega era total, y cuyo amor a Cristo no conocía
-                medias tintas. Su frase de vida —<em>"O todo o nada"</em>— se convirtió en luz para miles,
-                y hoy sostiene cada puntada que tejemos.
+            <div className="mb-12 text-center max-w-4xl mx-auto">
+              <p className="mb-6 text-lg leading-relaxed font-light" style={{ color: 'hsl(var(--earth))' }}>
+                Esta obra nace inspirada en la vida de la <strong>hermana Clare Crockett (1982-2016)</strong>, una mujer cuya alegría era contagiosa, cuya entrega era total, y cuyo amor a Cristo no conocía medias tintas. Su frase de vida —<em>"O todo o nada"</em>— se convirtió en luz para miles, y hoy sostiene cada puntada que tejemos.
               </p>
-              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
-                En 2025, su causa de beatificación fue oficialmente abierta por la Iglesia, siendo declarada
-                <strong> Sierva de Dios</strong>. Su testimonio no es historia: es invitación viva.
+              <p className="mb-12 text-lg leading-relaxed font-light" style={{ color: 'hsl(var(--earth))' }}>
+                En 2025, su causa de beatificación fue oficialmente abierta por la Iglesia, siendo declarada Sierva de Dios. Su testimonio no es historia: es invitación viva.
               </p>
-            </div>
-          </RevealOnScroll>
-
-          {/* Misión */}
-          <RevealOnScroll delay={200}>
-            <div className="mb-12">
-              <h3 className="text-2xl mb-6 font-medium text-center" style={{ color: 'hsl(var(--earth))' }}>
-                Lo que hacemos no son solo objetos. Son detalles que abrazan.
-              </h3>
-              <p className="mb-6 leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
-                Cada oratorio de bolsillo, cada llavero multimedallas, cada pieza tejida en macramé lleva consigo
-                una intención silenciosa: acompañarte cuando necesitas recordar que no estás solo. Que Dios camina
-                contigo. Que la belleza también es oración.
-              </p>
-              <p className="leading-relaxed text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
-                Como Clare ofreció su vida completamente —sin reservas, sin medias tintas— nosotros ofrecemos
-                nuestra artesanía del mismo modo: con entrega total, belleza auténtica, y el deseo profundo de
-                que cada pieza sea, para ti, un refugio portátil de paz.
-              </p>
+              
+              <div className="grid md:grid-cols-2 gap-6 mt-12 text-left">
+                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
+                  <h4 className="mb-4 text-xl font-normal" style={{ color: 'hsl(var(--terracotta))' }}>Detalles que abrazan</h4>
+                  <p className="text-base leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
+                    <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>No son solo objetos.</strong> Llevan una intención silenciosa: recordarte que <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>Dios camina contigo</strong>.
+                  </p>
+                </div>
+                
+                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
+                  <h4 className="mb-4 text-xl font-normal" style={{ color: 'hsl(var(--terracotta))' }}>Refugio portátil de paz</h4>
+                  <p className="text-base leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
+                    Ofrecemos nuestra artesanía con <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>entrega total</strong> para que cada pieza sea tu <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>refugio portátil de paz</strong>.
+                  </p>
+                </div>
+              </div>
             </div>
           </RevealOnScroll>
 
           {/* Pull Quote */}
-          <RevealOnScroll delay={300}>
+          <RevealOnScroll delay={200}>
             <div
-              className="p-6 rounded-lg border-l-4 italic text-center"
+              className="p-8 rounded-2xl italic text-center max-w-2xl mx-auto shadow-sm"
               style={{
                 backgroundColor: 'hsl(var(--sand))',
-                borderColor: 'hsl(var(--terracotta))'
+                border: '1px solid hsl(var(--warm-white))'
               }}
             >
-              <p className="text-xl font-light" style={{ color: 'hsl(var(--earth))' }}>
+              <p className="text-2xl font-light mb-2" style={{ color: 'hsl(var(--earth))' }}>
                 "O todo o nada"
               </p>
-              <p className="text-sm mt-2" style={{ color: 'hsl(var(--soft-brown))' }}>
-                — Clare Crockett
+              <p className="text-sm font-medium uppercase tracking-wider" style={{ color: 'hsl(var(--terracotta))' }}>
+                — Hna. Clare Crockett
               </p>
             </div>
           </RevealOnScroll>

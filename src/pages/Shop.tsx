@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
-import { ShoppingBag, Eye } from 'lucide-react';
+import { ShoppingBag, Eye, Store } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import RevealOnScroll from '@/components/RevealOnScroll';
-import ProductModal from '@/components/ProductModal';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -34,7 +34,7 @@ const Shop = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const navigate = useNavigate();
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -50,9 +50,15 @@ const Shop = () => {
     fetchData();
   }, []);
 
-  const filtered = selectedCategory === 'all'
+  const filtered = (selectedCategory === 'all'
     ? products
-    : products.filter(p => p.category_id === selectedCategory);
+    : products.filter(p => p.category_id === selectedCategory))
+    .sort((a, b) => {
+      // Sort by featured first, then by sort_order
+      if (a.is_featured && !b.is_featured) return -1;
+      if (!a.is_featured && b.is_featured) return 1;
+      return (a.sort_order || 0) - (b.sort_order || 0);
+    });
 
   const getMainImage = (product: Product) => {
     const sorted = [...(product.product_images || [])].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
@@ -121,8 +127,7 @@ const Shop = () => {
                 <RevealOnScroll key={product.id} delay={index * 80}>
                   <div className="clare-card group h-full flex flex-col">
                     {/* Image */}
-                    <div className="relative overflow-hidden rounded-lg mb-4 aspect-square cursor-pointer"
-                      onClick={() => setSelectedProduct(product)}>
+                    <Link to={`/producto/${product.id}`} className="relative overflow-hidden rounded-lg mb-4 aspect-square block group-hover:shadow-md transition-all">
                       {getMainImage(product) ? (
                         <img src={getMainImage(product)} alt={product.name}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
@@ -131,7 +136,6 @@ const Shop = () => {
                           <ShoppingBag size={48} style={{ color: 'hsl(var(--soft-brown))' }} />
                         </div>
                       )}
-                      {/* Overlay */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{ backgroundColor: 'hsla(var(--earth), 0.3)' }}>
                         <span className="px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'hsl(var(--warm-white))', color: 'hsl(var(--earth))' }}>
@@ -139,23 +143,33 @@ const Shop = () => {
                         </span>
                       </div>
                       {/* Badges */}
-                      {product.compare_at_price && product.compare_at_price > product.price && (
-                        <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold"
-                          style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
-                          Oferta
-                        </span>
-                      )}
+                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                        {product.is_featured && (
+                          <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                            style={{ backgroundColor: 'hsl(var(--earth))', color: 'hsl(var(--warm-white))' }}>
+                            Destacado
+                          </span>
+                        )}
+                        {product.compare_at_price && product.compare_at_price > product.price && (
+                          <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                            style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
+                            Oferta
+                          </span>
+                        )}
+                      </div>
                       {product.stock <= 0 && (
-                        <span className="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold"
-                          style={{ backgroundColor: 'hsl(var(--earth))', color: 'hsl(var(--warm-white))' }}>
+                        <span className="absolute top-3 right-3 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                          style={{ backgroundColor: 'hsl(var(--soft-brown))', color: 'hsl(var(--warm-white))' }}>
                           Agotado
                         </span>
                       )}
-                    </div>
+                    </Link>
 
                     {/* Info */}
                     <div className="flex-1 flex flex-col">
-                      <h3 className="text-lg font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>{product.name}</h3>
+                      <Link to={`/producto/${product.id}`} className="hover:underline">
+                        <h3 className="text-lg font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>{product.name}</h3>
+                      </Link>
                       {product.short_description && (
                         <p className="text-sm mb-3 flex-1 line-clamp-2" style={{ color: 'hsl(var(--soft-brown))' }}>{product.short_description}</p>
                       )}
@@ -171,12 +185,10 @@ const Shop = () => {
                           )}
                         </div>
                         <button
-                          onClick={() => addItem({ id: product.id, name: product.name, price: product.price, image_url: getMainImage(product), stock: product.stock })}
-                          disabled={product.stock <= 0}
-                          className="p-2 rounded-full transition-all duration-200 disabled:opacity-40"
-                          style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}
-                          title="Agregar al carrito">
-                          <ShoppingBag size={18} />
+                          onClick={() => navigate(`/producto/${product.id}`)}
+                          className="px-4 py-2 rounded-full transition-all duration-200 text-sm font-medium hover:-translate-y-0.5"
+                          style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
+                          Ver detalles
                         </button>
                       </div>
                     </div>
@@ -188,7 +200,7 @@ const Shop = () => {
         </div>
       </div>
 
-      {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
+
       <Footer />
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Pencil, Trash2, Save, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Save, X, Upload } from 'lucide-react';
+import { useRef } from 'react';
 
 interface NewsItem {
   id: string; title: string; slug: string; content: string | null;
@@ -11,6 +12,8 @@ const AdminNews = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [editing, setEditing] = useState<Partial<NewsItem> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchNews = async () => {
     const { data } = await supabase.from('news').select('*').order('created_at', { ascending: false });
@@ -22,22 +25,47 @@ const AdminNews = () => {
 
   const slugify = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+
   const handleSave = async () => {
     if (!editing?.title) return;
+    setUploading(true);
+    let finalImageUrl = editing.image_url;
+
+    if (pendingFile) {
+      const ext = pendingFile.name.split('.').pop();
+      const path = `news/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from('product-images').upload(path, pendingFile);
+      if (!error) {
+        const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path);
+        finalImageUrl = urlData.publicUrl;
+      }
+    }
+
     const slug = editing.slug || slugify(editing.title);
     const payload = {
       title: editing.title, slug, content: editing.content || null,
-      excerpt: editing.excerpt || null, image_url: editing.image_url || null,
+      excerpt: editing.excerpt || null, image_url: finalImageUrl || null,
       is_published: editing.is_published ?? false,
       published_at: editing.is_published ? (editing.published_at || new Date().toISOString()) : null,
     };
+
     if (editing.id) {
       await supabase.from('news').update(payload).eq('id', editing.id);
     } else {
       await supabase.from('news').insert(payload);
     }
+    
     setEditing(null);
+    setPendingFile(null);
+    setUploading(false);
     fetchNews();
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setPendingFile(e.target.files[0]);
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -68,15 +96,43 @@ const AdminNews = () => {
               <input value={editing.excerpt || ''} onChange={e => setEditing(p => ({ ...p, excerpt: e.target.value }))} className="w-full px-3 py-2 rounded-lg border text-sm" style={inputStyle} /></div>
             <div><label className="block text-xs font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>Contenido</label>
               <textarea rows={6} value={editing.content || ''} onChange={e => setEditing(p => ({ ...p, content: e.target.value }))} className="w-full px-3 py-2 rounded-lg border text-sm resize-none" style={inputStyle} /></div>
-            <div><label className="block text-xs font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>URL de imagen</label>
-              <input value={editing.image_url || ''} onChange={e => setEditing(p => ({ ...p, image_url: e.target.value }))} className="w-full px-3 py-2 rounded-lg border text-sm" style={inputStyle} /></div>
-            <label className="flex items-center gap-2 text-sm" style={{ color: 'hsl(var(--earth))' }}>
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>Imagen principal</label>
+              <div className="flex flex-col gap-3">
+                {(pendingFile || editing.image_url) && (
+                  <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-dashed" style={{ borderColor: 'hsl(var(--terracotta))' }}>
+                    <img 
+                      src={pendingFile ? URL.createObjectURL(pendingFile) : (editing.image_url || '')} 
+                      alt="Preview" className="w-full h-full object-cover" 
+                    />
+                    <button onClick={() => { setPendingFile(null); setEditing(p => ({ ...p, image_url: null })); fileInputRef.current && (fileInputRef.current.value = ''); }}
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs bg-white shadow">
+                      <X size={14} style={{ color: 'hsl(var(--terracotta))' }} />
+                    </button>
+                  </div>
+                )}
+                {!pendingFile && !editing.image_url && (
+                  <button onClick={() => fileInputRef.current?.click()}
+                    className="w-32 h-32 rounded-lg flex flex-col items-center justify-center gap-2 text-xs transition-colors"
+                    style={{ border: '2px dashed hsl(var(--sand))', color: 'hsl(var(--soft-brown))' }}>
+                    <Upload size={20} />
+                    <span>Subir foto</span>
+                  </button>
+                )}
+                <input ref={fileInputRef} type="file" accept="image/*" className="hidden"
+                  onChange={handleFileSelect} />
+                <p className="text-xs text-slate-500">Puedes cargar una imagen desde tu PC o celular.</p>
+              </div>
+            </div>
+            <label className="flex items-center gap-2 text-sm mt-4" style={{ color: 'hsl(var(--earth))' }}>
               <input type="checkbox" checked={editing.is_published ?? false} onChange={e => setEditing(p => ({ ...p, is_published: e.target.checked }))} style={{ accentColor: 'hsl(var(--terracotta))' }} /> Publicada
             </label>
           </div>
           <div className="mt-4 flex gap-3">
-            <button onClick={handleSave} className="clare-btn clare-btn-primary text-sm"><Save size={16} /> Guardar</button>
-            <button onClick={() => setEditing(null)} className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
+            <button onClick={handleSave} disabled={uploading} className="clare-btn clare-btn-primary text-sm">
+              <Save size={16} /> {uploading ? 'Guardando...' : 'Guardar'}
+            </button>
+            <button onClick={() => { setEditing(null); setPendingFile(null); }} className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
           </div>
         </div>
       )}

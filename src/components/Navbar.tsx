@@ -31,14 +31,20 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map(link => (
             <Link key={link.to} to={link.to}
-              className="text-sm font-medium transition-colors duration-200"
-              style={{ color: location.pathname === link.to ? 'hsl(var(--terracotta))' : 'hsl(var(--soft-brown))' }}>
+              className="text-base font-bold transition-colors duration-200"
+              style={{ 
+                fontFamily: 'var(--font-heading)',
+                color: location.pathname === link.to ? 'hsl(var(--terracotta))' : 'hsl(var(--earth))' 
+              }}>
               {link.label}
             </Link>
           ))}
           {isStaff && (
-            <Link to="/admin" className="text-sm font-medium transition-colors duration-200"
-              style={{ color: location.pathname.startsWith('/admin') ? 'hsl(var(--terracotta))' : 'hsl(var(--soft-brown))' }}>
+            <Link to="/admin" className="text-base font-bold transition-colors duration-200"
+              style={{ 
+                fontFamily: 'var(--font-heading)',
+                color: location.pathname.startsWith('/admin') ? 'hsl(var(--terracotta))' : 'hsl(var(--earth))' 
+              }}>
               Admin
             </Link>
           )}
@@ -47,19 +53,19 @@ const Navbar = () => {
         {/* Actions */}
         <div className="flex items-center gap-3">
           {user ? (
-            <button onClick={() => signOut()} className="p-2 rounded-full transition-colors" style={{ color: 'hsl(var(--soft-brown))' }} title="Cerrar sesión">
+            <button onClick={() => signOut()} className="p-2 rounded-full transition-colors hover:bg-slate-100" style={{ color: 'hsl(var(--earth))' }} title="Cerrar sesión">
               <LogOut size={20} />
             </button>
           ) : (
-            <Link to="/login" className="p-2 rounded-full transition-colors" style={{ color: 'hsl(var(--soft-brown))' }}>
+            <Link to="/login" className="p-2 rounded-full transition-colors hover:bg-slate-100" style={{ color: 'hsl(var(--earth))' }}>
               <User size={20} />
             </Link>
           )}
 
-          <button onClick={() => setIsOpen(true)} className="relative p-2 rounded-full transition-colors" style={{ color: 'hsl(var(--soft-brown))' }}>
+          <button onClick={() => setIsOpen(true)} className="relative p-2 rounded-full transition-colors hover:bg-slate-100" style={{ color: 'hsl(var(--earth))' }}>
             <ShoppingBag size={20} />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs flex items-center justify-center font-bold"
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold shadow-sm"
                 style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
                 {totalItems}
               </span>
@@ -75,18 +81,24 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden border-t animate-fade-in" style={{ backgroundColor: 'hsl(var(--cream))', borderColor: 'hsl(var(--sand))' }}>
-          <nav className="clare-container py-4 flex flex-col gap-4">
+        <div className="md:hidden border-t animate-fade-in" style={{ backgroundColor: 'hsl(var(--cream))', backdropFilter: 'blur(10px)', borderColor: 'hsl(var(--sand))' }}>
+          <nav className="clare-container py-6 flex flex-col gap-6">
             {navLinks.map(link => (
               <Link key={link.to} to={link.to} onClick={() => setMenuOpen(false)}
-                className="text-base font-medium py-2"
-                style={{ color: location.pathname === link.to ? 'hsl(var(--terracotta))' : 'hsl(var(--soft-brown))' }}>
+                className="text-xl font-bold py-2"
+                style={{ 
+                  fontFamily: 'var(--font-heading)',
+                  color: location.pathname === link.to ? 'hsl(var(--terracotta))' : 'hsl(var(--earth))' 
+                }}>
                 {link.label}
               </Link>
             ))}
             {isStaff && (
-              <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-base font-medium py-2"
-                style={{ color: 'hsl(var(--soft-brown))' }}>
+              <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-xl font-bold py-2"
+                style={{ 
+                  fontFamily: 'var(--font-heading)',
+                  color: location.pathname.startsWith('/admin') ? 'hsl(var(--terracotta))' : 'hsl(var(--earth))' 
+                }}>
                 Admin
               </Link>
             )}

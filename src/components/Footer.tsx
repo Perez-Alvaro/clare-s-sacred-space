@@ -1,7 +1,15 @@
 import { Instagram, Mail, Heart } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  const handleHeartClick = () => {
+    toast("Te quiero mucho flor, el cielo te sonrie por tu gran corazón. — Alvaro", {
+      duration: 5000,
+      icon: <Heart size={16} fill="hsl(var(--terracotta))" style={{ color: 'hsl(var(--terracotta))' }} />,
+    });
+  };
 
   return (
     <footer style={{ backgroundColor: 'hsl(var(--earth))' }}>
@@ -44,24 +52,24 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="#colecciones"
+                  href="/tienda"
                   className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
                   style={{
                     color: 'hsl(var(--sand))',
                   }}
                 >
-                  Colecciones
+                  Tienda
                 </a>
               </li>
               <li>
                 <a
-                  href="#historia"
+                  href="/novedades"
                   className="text-sm transition-colors duration-200 hover:translate-x-1 inline-block"
                   style={{
                     color: 'hsl(var(--sand))',
                   }}
                 >
-                  Nuestra Historia
+                  Novedades
                 </a>
               </li>
               <li>
@@ -130,14 +138,15 @@ const Footer = () => {
           <p style={{ color: 'hsl(var(--sand))' }}>
             © {currentYear} CLARE. Todos los derechos reservados.
           </p>
-          <p
-            className="flex items-center gap-2"
+          <button
+            onClick={handleHeartClick}
+            className="flex items-center gap-2 transition-all duration-300 hover:scale-110 active:scale-90"
             style={{ color: 'hsl(var(--sand))' }}
           >
             Hecho con
-            <Heart size={16} style={{ color: 'hsl(var(--warm-white))' }} fill="currentColor" />
+            <Heart size={16} className="text-red-300 transition-colors hover:text-red-400" fill="currentColor" />
             y devoción
-          </p>
+          </button>
         </div>
       </div>
     </footer>

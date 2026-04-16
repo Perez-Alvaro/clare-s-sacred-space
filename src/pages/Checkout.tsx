@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,10 +14,18 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
+  const [bankDetails, setBankDetails] = useState('');
   const [form, setForm] = useState({
     full_name: '', email: '', phone: '', address: '', city: '', province: '', postal_code: '', notes: '',
     payment_method: 'bank_transfer' as PaymentMethod,
   });
+
+  useEffect(() => {
+    supabase.from('news').select('content').eq('slug', 'store-setting-bank-transfer').single()
+      .then(({ data }) => {
+        if (data?.content) setBankDetails(data.content);
+      });
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -79,6 +87,13 @@ const Checkout = () => {
             {form.payment_method === 'bank_transfer' && (
               <div className="clare-card mt-6 text-left">
                 <h3 className="text-lg mb-3" style={{ color: 'hsl(var(--earth))' }}>Datos para transferencia</h3>
+                {bankDetails ? (
+                  <div className="p-4 rounded-xl border mb-4 text-sm whitespace-pre-wrap break-words" style={{ backgroundColor: 'hsl(var(--warm-white))', borderColor: 'hsl(var(--sand))', color: 'hsl(var(--earth))' }}>
+                    {bankDetails}
+                  </div>
+                ) : (
+                  <p className="text-sm mb-4" style={{ color: 'hsl(var(--soft-brown))' }}>Por favor consúltenos los datos de transferencia por WhatsApp.</p>
+                )}
                 <p className="text-sm mb-1" style={{ color: 'hsl(var(--soft-brown))' }}>
                   Enviá el comprobante por WhatsApp para confirmar tu pedido.
                 </p>

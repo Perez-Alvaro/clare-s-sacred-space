@@ -10,10 +10,10 @@ const CartDrawer = () => {
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setIsOpen(false)} />
+      <div className="fixed inset-0 z-[60] bg-black/40" onClick={() => setIsOpen(false)} />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md animate-fade-in flex flex-col"
+      <div className="fixed right-0 top-0 bottom-0 z-[60] w-full max-w-md animate-fade-in flex flex-col"
         style={{ backgroundColor: 'hsl(var(--cream))' }}>
 
         {/* Header */}
@@ -21,7 +21,8 @@ const CartDrawer = () => {
           <h2 className="text-xl" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>
             Tu Carrito ({totalItems})
           </h2>
-          <button onClick={() => setIsOpen(false)} className="p-2 rounded-full" style={{ color: 'hsl(var(--soft-brown))' }}>
+          <button onClick={() => setIsOpen(false)} className="p-2 rounded-full flex items-center gap-1 hover:bg-black/5 transition-colors" style={{ color: 'hsl(var(--soft-brown))' }}>
+            <span className="text-sm font-medium mr-1">Seguir comprando</span>
             <X size={20} />
           </button>
         </div>

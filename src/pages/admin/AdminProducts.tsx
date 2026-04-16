@@ -494,7 +494,15 @@ const AdminProducts = () => {
                             <Image size={16} style={{ color: 'hsl(var(--soft-brown))' }} />
                           </div>
                         )}
-                        <span style={{ color: 'hsl(var(--earth))' }}>{prod.name}</span>
+                        <div className="flex flex-col">
+                          <span className="font-medium" style={{ color: 'hsl(var(--earth))' }}>{prod.name}</span>
+                          {prod.is_featured && (
+                            <span className="w-fit text-[9px] px-1.5 py-0.5 rounded uppercase font-bold tracking-wider" 
+                                style={{ backgroundColor: 'hsl(var(--earth))', color: 'hsl(var(--warm-white))' }}>
+                              Destacado
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="py-3" style={{ color: 'hsl(var(--terracotta))' }}>${prod.price.toLocaleString('es-AR')}</td>
                       <td className="py-3" style={{ color: prod.stock <= 0 ? 'hsl(var(--terracotta))' : 'hsl(var(--soft-brown))' }}>{prod.stock}</td>

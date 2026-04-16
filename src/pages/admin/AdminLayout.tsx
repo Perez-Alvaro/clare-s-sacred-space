@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { LayoutDashboard, Package, FolderOpen, ShoppingCart, Users, Newspaper, LogOut, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Package, FolderOpen, ShoppingCart, Users, Newspaper, LogOut, Menu, X, ChevronRight, Settings as SettingsIcon } from 'lucide-react';
 
 const AdminLayout = () => {
   const { user, isStaff, loading, signOut } = useAuth();
@@ -26,6 +26,7 @@ const AdminLayout = () => {
     { to: '/admin/orders', icon: ShoppingCart, label: 'Pedidos' },
     { to: '/admin/customers', icon: Users, label: 'Clientes' },
     { to: '/admin/news', icon: Newspaper, label: 'Novedades' },
+    { to: '/admin/settings', icon: SettingsIcon, label: 'Configuración' },
   ];
 
   const isActive = (item: typeof navItems[0]) =>
