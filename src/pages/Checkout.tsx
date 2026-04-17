@@ -15,6 +15,18 @@ const Checkout = () => {
   const [success, setSuccess] = useState(false);
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
   const [bankDetails, setBankDetails] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (!bankDetails) return;
+    try {
+      await navigator.clipboard.writeText(bankDetails);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {
+      console.error('Copy failed', e);
+    }
+  };
   const [form, setForm] = useState({
     full_name: '', email: '', phone: '', address: '', city: '', province: '', postal_code: '', notes: '',
     payment_method: 'bank_transfer' as PaymentMethod,
