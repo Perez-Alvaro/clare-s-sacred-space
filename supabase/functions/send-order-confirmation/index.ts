@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
         <div style="background:#FFFDF8;border:1px solid #E8DCC3;border-radius:12px;padding:20px;margin:24px 0;">
           <h3 style="margin:0 0 12px;color:#8B6A4E;font-family:Georgia,serif;font-size:18px;">Datos para transferencia</h3>
           ${bank_details
-            ? `<pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:14px;color:#8B6A4E;margin:0 0 12px;">${bank_details.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]!))}</pre>`
+            ? `<pre style="white-space:pre-wrap;font-family:Arial,sans-serif;font-size:14px;color:#8B6A4E;margin:0 0 12px;">${escapeHtml(bank_details)}</pre>`
             : `<p style="margin:0 0 12px;color:#9C7A56;font-size:14px;">Consultanos los datos por WhatsApp.</p>`}
           <p style="margin:0;color:#9C7A56;font-size:14px;">Una vez realizada la transferencia, enviá el comprobante por WhatsApp para confirmar tu pedido.</p>
         </div>`
