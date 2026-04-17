@@ -68,8 +68,12 @@ const Checkout = () => {
 
       // Create order items
       const orderItems = items.map(item => ({
-        order_id: order.id, product_id: item.product_id ?? item.id, product_name: item.name,
-        quantity: item.quantity, unit_price: item.price, total: item.price * item.quantity,
+        order_id: order.id, 
+        product_id: item.product_id, 
+        product_name: item.name,
+        quantity: item.quantity, 
+        unit_price: item.price, 
+        total: item.price * item.quantity,
       }));
       const { error: itemsErr } = await supabase.from('order_items').insert(orderItems);
       if (itemsErr) throw itemsErr;

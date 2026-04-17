@@ -138,8 +138,8 @@ const Shop = () => {
                       )}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         style={{ backgroundColor: 'hsla(var(--earth), 0.3)' }}>
-                        <span className="px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: 'hsl(var(--warm-white))', color: 'hsl(var(--earth))' }}>
-                          <Eye size={16} className="inline mr-1" /> Ver detalle
+                        <span className="px-5 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider" style={{ backgroundColor: 'hsl(var(--warm-white))', color: 'hsl(var(--earth))' }}>
+                          COMPRAR
                         </span>
                       </div>
                       {/* Badges */}
@@ -186,9 +186,9 @@ const Shop = () => {
                         </div>
                         <button
                           onClick={() => navigate(`/producto/${product.id}`)}
-                          className="px-4 py-2 rounded-full transition-all duration-200 text-sm font-medium hover:-translate-y-0.5"
+                          className="px-6 py-2 rounded-full transition-all duration-300 text-sm font-bold uppercase tracking-wide hover:-translate-y-1 shadow-sm hover:shadow-md"
                           style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
-                          Ver detalles
+                          COMPRAR
                         </button>
                       </div>
                     </div>
