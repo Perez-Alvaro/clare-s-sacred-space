@@ -54,10 +54,10 @@ const Shop = () => {
     ? products
     : products.filter(p => p.category_id === selectedCategory))
     .sort((a, b) => {
-      // Sort by featured first, then by sort_order
+      // Sort by featured first
       if (a.is_featured && !b.is_featured) return -1;
       if (!a.is_featured && b.is_featured) return 1;
-      return (a.sort_order || 0) - (b.sort_order || 0);
+      return 0;
     });
 
   const getMainImage = (product: Product) => {
