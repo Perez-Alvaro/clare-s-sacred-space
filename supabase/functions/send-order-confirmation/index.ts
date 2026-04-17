@@ -26,7 +26,7 @@ interface RequestBody {
 }
 
 const SELLER_NAME = 'Flor';
-const SELLER_EMAIL = 'florseia2015@gmail.com';
+const SELLER_EMAIL = 'florenciaseia67@gmail.com';
 const SELLER_WHATSAPP = '3534259493';
 const SELLER_WHATSAPP_DISPLAY = '+54 9 3534 25-9493';
 const BRAND_NAME = 'CLARE';
