@@ -113,13 +113,34 @@ const Checkout = () => {
             <p className="text-lg mb-2" style={{ color: 'hsl(var(--soft-brown))' }}>
               Tu pedido #{orderNumber} fue registrado.
             </p>
+
+            {/* Email confirmation notice */}
+            <div className="flex items-start gap-3 p-4 rounded-xl mt-6 text-left" style={{ backgroundColor: 'hsl(var(--warm-white))', border: '1px solid hsl(var(--sand))' }}>
+              <Mail size={20} className="mt-0.5 flex-shrink-0" style={{ color: 'hsl(var(--terracotta))' }} />
+              <div>
+                <p className="text-sm font-medium mb-1" style={{ color: 'hsl(var(--earth))' }}>
+                  Te enviamos un email con la confirmación
+                </p>
+                <p className="text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>
+                  Revisá tu casilla (y la carpeta de spam) con el detalle del pedido. Recordá enviar el comprobante por WhatsApp para confirmarlo.
+                </p>
+              </div>
+            </div>
+
             {form.payment_method === 'bank_transfer' && (
               <div className="clare-card mt-6 text-left">
                 <h3 className="text-lg mb-3" style={{ color: 'hsl(var(--earth))' }}>Datos para transferencia</h3>
                 {bankDetails ? (
-                  <div className="p-4 rounded-xl border mb-4 text-sm whitespace-pre-wrap break-words" style={{ backgroundColor: 'hsl(var(--warm-white))', borderColor: 'hsl(var(--sand))', color: 'hsl(var(--earth))' }}>
-                    {bankDetails}
-                  </div>
+                  <>
+                    <div className="p-4 rounded-xl border mb-3 text-sm whitespace-pre-wrap break-words" style={{ backgroundColor: 'hsl(var(--warm-white))', borderColor: 'hsl(var(--sand))', color: 'hsl(var(--earth))' }}>
+                      {bankDetails}
+                    </div>
+                    <button type="button" onClick={handleCopy}
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-all hover:opacity-80 mb-4"
+                      style={{ borderColor: 'hsl(var(--terracotta))', color: copied ? 'hsl(var(--olive))' : 'hsl(var(--terracotta))', backgroundColor: 'transparent' }}>
+                      {copied ? <><Check size={16} /> ¡Copiado!</> : <><Copy size={16} /> Copiar datos</>}
+                    </button>
+                  </>
                 ) : (
                   <p className="text-sm mb-4" style={{ color: 'hsl(var(--soft-brown))' }}>Por favor consúltenos los datos de transferencia por WhatsApp.</p>
                 )}
