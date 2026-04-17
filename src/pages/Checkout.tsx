@@ -80,6 +80,8 @@ const Checkout = () => {
           order_number: order.order_number,
           customer_name: form.full_name,
           customer_email: form.email,
+          customer_phone: form.phone,
+          customer_notes: form.notes,
           payment_method: form.payment_method,
           shipping_address: `${form.address}, ${form.city}, ${form.province} ${form.postal_code}`,
           items: orderItems.map(i => ({
