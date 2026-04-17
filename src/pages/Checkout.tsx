@@ -4,7 +4,7 @@ import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Mail, Copy, Check } from 'lucide-react';
 
 type PaymentMethod = 'bank_transfer' | 'cash_on_delivery';
 
