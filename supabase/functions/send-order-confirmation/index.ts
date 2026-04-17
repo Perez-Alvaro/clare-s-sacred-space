@@ -128,28 +128,91 @@ Deno.serve(async (req) => {
   </div>
 </body></html>`;
 
-    const resp = await fetch(`${GATEWAY_URL}/emails`, {
+    // Email interno para Flor (vendedora)
+    const paymentLabel = payment_method === 'bank_transfer' ? 'Transferencia bancaria' : 'Pago contra entrega';
+    const internalItemsHtml = items.map(i => `
+      <tr>
+        <td style="padding:8px;border-bottom:1px solid #E8DCC3;color:#8B6A4E;">${escapeHtml(i.product_name)}</td>
+        <td style="padding:8px;border-bottom:1px solid #E8DCC3;text-align:center;color:#8B6A4E;">${i.quantity}</td>
+        <td style="padding:8px;border-bottom:1px solid #E8DCC3;text-align:right;color:#8B6A4E;">${fmt(i.unit_price)}</td>
+        <td style="padding:8px;border-bottom:1px solid #E8DCC3;text-align:right;color:#8B6A4E;">${fmt(i.total)}</td>
+      </tr>`).join('');
+
+    const internalHtml = `<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Nuevo pedido #${order_number}</title></head>
+<body style="margin:0;padding:0;background:#F8F1E9;font-family:Arial,sans-serif;color:#8B6A4E;">
+  <div style="max-width:640px;margin:0 auto;padding:32px 24px;">
+    <div style="background:#FFFDF8;border-radius:16px;padding:28px 24px;border:1px solid #E8DCC3;">
+      <h1 style="font-family:Georgia,serif;color:#C17F5A;font-size:26px;margin:0 0 4px;">Nuevo pedido #${order_number}</h1>
+      <p style="margin:0 0 20px;color:#9C7A56;font-size:14px;">Se registró un nuevo pedido en la tienda CLARE.</p>
+
+      <h2 style="font-family:Georgia,serif;color:#8B6A4E;font-size:18px;margin:20px 0 8px;">Datos del cliente</h2>
+      <table style="width:100%;font-size:14px;color:#8B6A4E;">
+        <tr><td style="padding:4px 0;width:120px;color:#9C7A56;">Nombre:</td><td><strong>${escapeHtml(customer_name)}</strong></td></tr>
+        <tr><td style="padding:4px 0;color:#9C7A56;">Email:</td><td><a href="mailto:${escapeHtml(customer_email)}" style="color:#C17F5A;">${escapeHtml(customer_email)}</a></td></tr>
+        ${customer_phone ? `<tr><td style="padding:4px 0;color:#9C7A56;">Teléfono:</td><td><a href="https://wa.me/${customer_phone.replace(/\D/g,'')}" style="color:#C17F5A;">${escapeHtml(customer_phone)}</a></td></tr>` : ''}
+        <tr><td style="padding:4px 0;color:#9C7A56;vertical-align:top;">Envío a:</td><td>${escapeHtml(shipping_address)}</td></tr>
+        <tr><td style="padding:4px 0;color:#9C7A56;">Pago:</td><td>${paymentLabel}</td></tr>
+        ${customer_notes ? `<tr><td style="padding:4px 0;color:#9C7A56;vertical-align:top;">Notas:</td><td>${escapeHtml(customer_notes)}</td></tr>` : ''}
+      </table>
+
+      <h2 style="font-family:Georgia,serif;color:#8B6A4E;font-size:18px;margin:24px 0 8px;">Productos</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <thead><tr style="background:#F8F1E9;">
+          <th style="padding:8px;text-align:left;color:#8B6A4E;">Producto</th>
+          <th style="padding:8px;text-align:center;color:#8B6A4E;">Cant.</th>
+          <th style="padding:8px;text-align:right;color:#8B6A4E;">Unit.</th>
+          <th style="padding:8px;text-align:right;color:#8B6A4E;">Total</th>
+        </tr></thead>
+        <tbody>${internalItemsHtml}</tbody>
+        <tfoot><tr>
+          <td colspan="3" style="padding:12px 8px;text-align:right;font-weight:bold;color:#8B6A4E;">Total</td>
+          <td style="padding:12px 8px;text-align:right;font-weight:bold;font-size:18px;color:#C17F5A;">${fmt(total)}</td>
+        </tr></tfoot>
+      </table>
+    </div>
+  </div>
+</body></html>`;
+
+    const sendEmail = (payload: Record<string, unknown>) => fetch(`${GATEWAY_URL}/emails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'X-Connection-Api-Key': RESEND_API_KEY,
       },
-      body: JSON.stringify({
+      body: JSON.stringify(payload),
+    });
+
+    const [customerResp, internalResp] = await Promise.all([
+      sendEmail({
         from: 'CLARE <onboarding@resend.dev>',
         to: [customer_email],
         subject: `Confirmación de tu pedido #${order_number} — CLARE`,
         html,
       }),
-    });
+      sendEmail({
+        from: 'CLARE <onboarding@resend.dev>',
+        to: [SELLER_EMAIL],
+        reply_to: customer_email,
+        subject: `🛍️ Nuevo pedido #${order_number} — ${customer_name}`,
+        html: internalHtml,
+      }),
+    ]);
 
-    const data = await resp.json();
-    if (!resp.ok) {
-      console.error('Resend error', resp.status, data);
-      throw new Error(`Resend [${resp.status}]: ${JSON.stringify(data)}`);
+    const customerData = await customerResp.json();
+    const internalData = await internalResp.json();
+    if (!customerResp.ok) console.error('Resend customer error', customerResp.status, customerData);
+    if (!internalResp.ok) console.error('Resend internal error', internalResp.status, internalData);
+    if (!customerResp.ok && !internalResp.ok) {
+      throw new Error(`Resend falló en ambos envíos`);
     }
 
-    return new Response(JSON.stringify({ success: true, id: data.id }), {
+    return new Response(JSON.stringify({
+      success: true,
+      customer_email_id: customerData?.id ?? null,
+      internal_email_id: internalData?.id ?? null,
+    }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (err) {
