@@ -62,6 +62,23 @@ const Checkout = () => {
       const { error: itemsErr } = await supabase.from('order_items').insert(orderItems);
       if (itemsErr) throw itemsErr;
 
+      // Send confirmation email (no bloqueante)
+      supabase.functions.invoke('send-order-confirmation', {
+        body: {
+          order_number: order.order_number,
+          customer_name: form.full_name,
+          customer_email: form.email,
+          payment_method: form.payment_method,
+          shipping_address: `${form.address}, ${form.city}, ${form.province} ${form.postal_code}`,
+          items: orderItems.map(i => ({
+            product_name: i.product_name, quantity: i.quantity,
+            unit_price: i.unit_price, total: i.total,
+          })),
+          total: subtotal,
+          bank_details: form.payment_method === 'bank_transfer' ? bankDetails : undefined,
+        },
+      }).catch(err => console.error('Email error:', err));
+
       setOrderNumber(order.order_number);
       setSuccess(true);
       clearCart();
