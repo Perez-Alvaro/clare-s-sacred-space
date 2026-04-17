@@ -120,7 +120,7 @@ const ProductDetail = () => {
     const cartItemName = selectedVariantLabels ? `${product.name} (${selectedVariantLabels})` : product.name;
     const cartItemId = selectedVariantLabels ? `${product.id}-${btoa(selectedVariantLabels).replace(/=/g, '')}` : product.id;
 
-    addItem({ id: cartItemId, name: cartItemName, price: finalPrice, image_url: images[0]?.url, stock: product.stock });
+    addItem({ id: cartItemId, product_id: product.id, name: cartItemName, price: finalPrice, image_url: images[0]?.url, stock: product.stock });
   };
 
   return (
