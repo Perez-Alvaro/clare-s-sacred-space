@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
 
     const body: RequestBody = await req.json();
     const {
-      order_number, customer_name, customer_email,
+      order_number, customer_name, customer_email, customer_phone, customer_notes,
       payment_method, shipping_address, items, total, bank_details,
     } = body;
 
