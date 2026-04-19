@@ -153,7 +153,7 @@ const Checkout = () => {
                 <p className="text-sm mb-1" style={{ color: 'hsl(var(--soft-brown))' }}>
                   Enviá el comprobante por WhatsApp para confirmar tu pedido.
                 </p>
-                <a href="https://wa.me/3534259493" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/5493534259493" target="_blank" rel="noopener noreferrer"
                   className="clare-btn clare-btn-primary mt-4 inline-flex">
                   Enviar comprobante por WhatsApp
                 </a>
