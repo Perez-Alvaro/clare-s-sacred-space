@@ -98,12 +98,12 @@ const Footer = () => {
             </h4>
             <div className="space-y-4 mb-6">
               <a
-                href="mailto:florseia2015@gmail.com"
+                href="mailto:florenciaseia67@gmail.com"
                 className="flex items-center gap-3 text-sm transition-colors duration-200"
                 style={{ color: 'hsl(var(--sand))' }}
               >
                 <Mail size={18} />
-                florseia2015@gmail.com
+                florenciaseia67@gmail.com
               </a>
             </div>
 
