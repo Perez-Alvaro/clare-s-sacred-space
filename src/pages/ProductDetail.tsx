@@ -128,25 +128,12 @@ const ProductDetail = () => {
             <span className="truncate font-medium" style={{ color: 'hsl(var(--earth))' }}>{product.name}</span>
           </nav>
 
-          <div className="bg-white rounded-2xl md:rounded-3xl overflow-hidden md:shadow-xl md:border border-slate-100 flex flex-col md:flex-row">
+          <div className="bg-white rounded-2xl md:rounded-3xl overflow-hidden md:shadow-xl md:border border-slate-100 max-w-3xl mx-auto">
             {/* Gallery */}
-            <div className="w-full md:w-1/2 md:p-6 md:bg-slate-50">
-              <div className="flex flex-col-reverse md:flex-row gap-3">
-                {/* Thumbnails (desktop: vertical) */}
-                {images.length > 1 && (
-                  <div className="hidden md:flex flex-col gap-2 w-20 flex-shrink-0">
-                    {images.map((img, idx) => (
-                      <button key={img.id} onClick={() => setCurrentImage(idx)}
-                        className="aspect-square rounded-lg overflow-hidden border-2 transition-all"
-                        style={{ borderColor: idx === currentImage ? 'hsl(var(--terracotta))' : 'transparent', opacity: idx === currentImage ? 1 : 0.7 }}>
-                        <img src={img.url} alt={img.alt_text || ''} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-
+            <div className="w-full">
+              <div className="flex flex-col gap-3">
                 {/* Main image */}
-                <div className="flex-1 relative bg-slate-50 md:bg-white aspect-square md:rounded-xl overflow-hidden">
+                <div className="relative bg-slate-50 aspect-square overflow-hidden">
                   {images.length > 0 ? (
                     <>
                       <img src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
@@ -180,9 +167,9 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Mobile thumbnails (horizontal) */}
+              {/* Thumbnails (horizontal, all sizes) */}
               {images.length > 1 && (
-                <div className="flex md:hidden gap-2 px-4 py-3 overflow-x-auto">
+                <div className="flex gap-2 px-4 py-3 overflow-x-auto">
                   {images.map((img, idx) => (
                     <button key={img.id} onClick={() => setCurrentImage(idx)}
                       className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all"
@@ -195,7 +182,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Info */}
-            <div className="w-full md:w-1/2 p-5 md:p-10 flex flex-col">
+            <div className="w-full p-5 md:p-10 flex flex-col">
               {/* Title + price block */}
               <div className="pb-5 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
                 <h1 className="text-2xl md:text-4xl font-medium leading-tight mb-2" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>
