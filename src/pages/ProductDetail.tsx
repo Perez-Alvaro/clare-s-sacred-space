@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ShoppingBag, ChevronLeft, ChevronRight, ExternalLink, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, ChevronLeft, ChevronRight, ExternalLink, ChevronRight as ChevronRightIcon, Truck, ShieldCheck, Heart, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
@@ -24,27 +24,19 @@ const ProductDetail = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
+  const [quantity, setQuantity] = useState(1);
+  const [descOpen, setDescOpen] = useState(true);
+  const [shipOpen, setShipOpen] = useState(false);
   const { addItem } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
-      
-      const { data } = await supabase
-        .from('products')
-        .select('*, product_images(*)')
-        .eq('id', id)
-        .single();
-      
-      if (!data) {
-        setLoading(false);
-        return;
-      }
-      
+      const { data } = await supabase.from('products').select('*, product_images(*)').eq('id', id).single();
+      if (!data) { setLoading(false); return; }
       setProduct(data as Product);
       setImages([...(data.product_images || [])].sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0)));
 
-      // Fetch variants
       const { data: vData } = await supabase.from('product_variants').select('*').eq('product_id', id).order('sort_order');
       if (vData && vData.length > 0) {
         const filledVariants = [];
@@ -53,11 +45,7 @@ const ProductDetail = () => {
           const { data: opts } = await supabase.from('product_variant_options').select('*').eq('variant_id', v.id).order('sort_order');
           if (opts && opts.length > 0) {
             filledVariants.push({ ...v, options: opts });
-            if (v.type === 'single_choice') {
-              initSelections[v.id] = [opts[0].id];
-            } else {
-              initSelections[v.id] = [];
-            }
+            initSelections[v.id] = v.type === 'single_choice' ? [opts[0].id] : [];
           }
         }
         setVariants(filledVariants as Variant[]);
@@ -65,7 +53,6 @@ const ProductDetail = () => {
       }
       setLoading(false);
     };
-
     fetchProduct();
     window.scrollTo(0, 0);
   }, [id]);
@@ -100,15 +87,15 @@ const ProductDetail = () => {
     let sum = 0;
     variants.forEach(v => {
       const selected = selectedOptions[v.id] || [];
-      v.options.forEach(opt => {
-        if (selected.includes(opt.id)) sum += opt.price_modifier || 0;
-      });
+      v.options.forEach(opt => { if (selected.includes(opt.id)) sum += opt.price_modifier || 0; });
     });
     return sum;
   };
 
   const finalPrice = product.price + getModifiersSum();
   const finalComparePrice = product.compare_at_price ? product.compare_at_price + getModifiersSum() : null;
+  const discountPct = finalComparePrice && finalComparePrice > finalPrice
+    ? Math.round(((finalComparePrice - finalPrice) / finalComparePrice) * 100) : 0;
 
   const handleAddToCart = () => {
     const selectedVariantLabels = variants.map(v => {
@@ -119,107 +106,147 @@ const ProductDetail = () => {
 
     const cartItemName = selectedVariantLabels ? `${product.name} (${selectedVariantLabels})` : product.name;
     const cartItemId = selectedVariantLabels ? `${product.id}-${btoa(selectedVariantLabels).replace(/=/g, '')}` : product.id;
-
-    addItem({ id: cartItemId, product_id: product.id, name: cartItemName, price: finalPrice, image_url: images[0]?.url, stock: product.stock });
+    for (let i = 0; i < quantity; i++) {
+      addItem({ id: cartItemId, product_id: product.id, name: cartItemName, price: finalPrice, image_url: images[0]?.url, stock: product.stock });
+    }
   };
+
+  const outOfStock = product.stock <= 0;
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'hsl(var(--cream))' }}>
       <Navbar />
-      
-      <main className="flex-1 pt-24 pb-16">
+
+      <main className="flex-1 pt-20 md:pt-24 pb-32 md:pb-16">
         <div className="clare-container">
-          <Link to="/tienda" className="inline-flex items-center gap-2 mb-6 text-sm hover:underline transition-all" style={{ color: 'hsl(var(--soft-brown))' }}>
-            <ArrowLeft size={16} /> Volver a la tienda
-          </Link>
-          
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-slate-100">
-            {/* Gallery Section */}
-            <div className="w-full md:w-1/2 relative bg-slate-50 min-h-[400px] md:min-h-[600px] flex items-center justify-center p-4">
-              {images.length > 0 ? (
-                <>
-                  <div className="w-full h-full relative rounded-xl overflow-hidden shadow-inner">
-                    <img src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name} 
-                      className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300" />
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1.5 text-xs md:text-sm mb-4 md:mb-6 overflow-x-auto whitespace-nowrap" style={{ color: 'hsl(var(--soft-brown))' }}>
+            <Link to="/" className="hover:underline">Inicio</Link>
+            <ChevronRightIcon size={12} className="opacity-50" />
+            <Link to="/tienda" className="hover:underline">Tienda</Link>
+            <ChevronRightIcon size={12} className="opacity-50" />
+            <span className="truncate font-medium" style={{ color: 'hsl(var(--earth))' }}>{product.name}</span>
+          </nav>
+
+          <div className="bg-white rounded-2xl md:rounded-3xl overflow-hidden md:shadow-xl md:border border-slate-100 flex flex-col md:flex-row">
+            {/* Gallery */}
+            <div className="w-full md:w-1/2 md:p-6 md:bg-slate-50">
+              <div className="flex flex-col-reverse md:flex-row gap-3">
+                {/* Thumbnails (desktop: vertical) */}
+                {images.length > 1 && (
+                  <div className="hidden md:flex flex-col gap-2 w-20 flex-shrink-0">
+                    {images.map((img, idx) => (
+                      <button key={img.id} onClick={() => setCurrentImage(idx)}
+                        className="aspect-square rounded-lg overflow-hidden border-2 transition-all"
+                        style={{ borderColor: idx === currentImage ? 'hsl(var(--terracotta))' : 'transparent', opacity: idx === currentImage ? 1 : 0.7 }}>
+                        <img src={img.url} alt={img.alt_text || ''} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
                   </div>
-                  {images.length > 1 && (
+                )}
+
+                {/* Main image */}
+                <div className="flex-1 relative bg-slate-50 md:bg-white aspect-square md:rounded-xl overflow-hidden">
+                  {images.length > 0 ? (
                     <>
-                      <button onClick={() => setCurrentImage(i => (i - 1 + images.length) % images.length)}
-                        className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full shadow-lg transition-transform hover:scale-110" 
-                        style={{ backgroundColor: 'hsla(var(--warm-white), 0.95)' }}>
-                        <ChevronLeft size={24} style={{ color: 'hsl(var(--earth))' }} />
-                      </button>
-                      <button onClick={() => setCurrentImage(i => (i + 1) % images.length)}
-                        className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full shadow-lg transition-transform hover:scale-110" 
-                        style={{ backgroundColor: 'hsla(var(--warm-white), 0.95)' }}>
-                        <ChevronRight size={24} style={{ color: 'hsl(var(--earth))' }} />
-                      </button>
-                      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 p-3 rounded-full backdrop-blur-sm bg-black/10">
-                        {images.map((_, idx) => (
-                          <button key={idx} onClick={() => setCurrentImage(idx)}
-                            className="w-3 h-3 rounded-full transition-all duration-300" 
-                            style={{ 
-                              backgroundColor: idx === currentImage ? 'hsl(var(--terracotta))' : 'hsla(var(--warm-white), 0.8)',
-                              transform: idx === currentImage ? 'scale(1.2)' : 'scale(1)'
-                            }} />
-                        ))}
-                      </div>
+                      <img src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
+                        className="absolute inset-0 w-full h-full object-cover" />
+                      {discountPct > 0 && (
+                        <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"
+                          style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
+                          -{discountPct}%
+                        </span>
+                      )}
+                      {images.length > 1 && (
+                        <>
+                          <button onClick={() => setCurrentImage(i => (i - 1 + images.length) % images.length)}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md md:p-2.5"
+                            style={{ backgroundColor: 'hsla(var(--warm-white), 0.95)' }}>
+                            <ChevronLeft size={18} style={{ color: 'hsl(var(--earth))' }} />
+                          </button>
+                          <button onClick={() => setCurrentImage(i => (i + 1) % images.length)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md md:p-2.5"
+                            style={{ backgroundColor: 'hsla(var(--warm-white), 0.95)' }}>
+                            <ChevronRight size={18} style={{ color: 'hsl(var(--earth))' }} />
+                          </button>
+                        </>
+                      )}
                     </>
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                      <ShoppingBag size={64} className="mb-2" /><p className="text-sm">Sin imagen</p>
+                    </div>
                   )}
-                </>
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                  <ShoppingBag size={80} className="mb-4" />
-                  <p>Sin imagen</p>
+                </div>
+              </div>
+
+              {/* Mobile thumbnails (horizontal) */}
+              {images.length > 1 && (
+                <div className="flex md:hidden gap-2 px-4 py-3 overflow-x-auto">
+                  {images.map((img, idx) => (
+                    <button key={img.id} onClick={() => setCurrentImage(idx)}
+                      className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all"
+                      style={{ borderColor: idx === currentImage ? 'hsl(var(--terracotta))' : 'hsl(var(--sand))', opacity: idx === currentImage ? 1 : 0.6 }}>
+                      <img src={img.url} alt={img.alt_text || ''} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
 
-            {/* Info Section */}
-            <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col">
-              <h1 className="text-3xl md:text-4xl mb-2 font-medium" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>
-                {product.name}
-              </h1>
-              
-              {product.short_description && (
-                <p className="text-lg italic mb-6 break-words" style={{ color: 'hsl(var(--soft-brown))', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                  {product.short_description}
-                </p>
-              )}
-
-              <div className="flex items-end gap-4 mb-6 pb-6 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
-                <span className="text-4xl font-semibold" style={{ color: 'hsl(var(--terracotta))' }}>
-                  ${finalPrice.toLocaleString('es-AR')}
-                </span>
-                {finalComparePrice && finalComparePrice > finalPrice && (
-                  <span className="text-xl line-through mb-1" style={{ color: 'hsl(var(--soft-brown))' }}>
-                    ${finalComparePrice.toLocaleString('es-AR')}
-                  </span>
+            {/* Info */}
+            <div className="w-full md:w-1/2 p-5 md:p-10 flex flex-col">
+              {/* Title + price block */}
+              <div className="pb-5 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
+                <h1 className="text-2xl md:text-4xl font-medium leading-tight mb-2" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>
+                  {product.name}
+                </h1>
+                {product.short_description && (
+                  <p className="text-sm md:text-base italic mb-4 break-words" style={{ color: 'hsl(var(--soft-brown))' }}>
+                    {product.short_description}
+                  </p>
                 )}
+                <div className="flex items-baseline gap-3 flex-wrap">
+                  <span className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(var(--terracotta))' }}>
+                    ${finalPrice.toLocaleString('es-AR')}
+                  </span>
+                  {finalComparePrice && finalComparePrice > finalPrice && (
+                    <span className="text-base md:text-lg line-through" style={{ color: 'hsl(var(--soft-brown))' }}>
+                      ${finalComparePrice.toLocaleString('es-AR')}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs mt-2" style={{ color: 'hsl(var(--soft-brown))' }}>
+                  O hasta 3 cuotas sin interés a coordinar con la vendedora.
+                </p>
               </div>
 
-              {/* Variants Section */}
+              {/* Variants */}
               {variants.length > 0 && (
-                <div className="space-y-6 mb-8">
+                <div className="space-y-5 py-5 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
                   {variants.map(v => (
                     <div key={v.id}>
-                      <h4 className="text-base font-semibold mb-3 uppercase tracking-wide" style={{ color: 'hsl(var(--earth))' }}>
-                        {v.name} {v.type === 'multiple_choice' && <span className="text-xs font-normal lowercase" style={{ color: 'hsl(var(--soft-brown))' }}>(Podés elegir varios)</span>}
-                      </h4>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex items-baseline justify-between mb-2.5">
+                        <h4 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--earth))' }}>
+                          {v.name}
+                        </h4>
+                        {v.type === 'multiple_choice' && (
+                          <span className="text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>Elegí varios</span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
                         {v.options.map(opt => {
                           const isSelected = (selectedOptions[v.id] || []).includes(opt.id);
                           return (
                             <button key={opt.id}
                               onClick={() => toggleOption(v.id, opt.id, v.type === 'single_choice')}
-                              className="px-5 py-2.5 rounded-xl font-medium transition-all duration-300 border-2"
-                              style={{ 
+                              className="px-4 py-2 rounded-lg text-sm font-medium transition-all border-2"
+                              style={{
                                 backgroundColor: isSelected ? 'hsl(var(--terracotta))' : 'transparent',
                                 borderColor: isSelected ? 'hsl(var(--terracotta))' : 'hsl(var(--sand))',
                                 color: isSelected ? 'hsl(var(--warm-white))' : 'hsl(var(--earth))',
-                                transform: isSelected ? 'scale(1.02)' : 'none'
                               }}>
-                              {opt.label} {opt.price_modifier > 0 && <span className="opacity-80 ml-1">(+${opt.price_modifier})</span>}
+                              {opt.label}{opt.price_modifier > 0 && <span className="opacity-80 ml-1">+${opt.price_modifier}</span>}
                             </button>
                           );
                         })}
@@ -229,42 +256,111 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {/* Description */}
-              {product.description && (
-                <div className="mb-8 p-6 rounded-2xl border-2" style={{ backgroundColor: 'hsl(var(--cream))', borderColor: 'hsl(var(--sand))' }}>
-                  <h4 className="text-base font-semibold mb-4 uppercase tracking-wide" style={{ color: 'hsl(var(--earth))' }}>Detalles del producto</h4>
-                  <div className="text-base leading-relaxed whitespace-pre-wrap break-words" style={{ color: 'hsl(var(--soft-brown))', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                    {product.description}
+              {/* Quantity selector */}
+              <div className="py-5 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
+                <h4 className="text-sm font-semibold uppercase tracking-wider mb-2.5" style={{ color: 'hsl(var(--earth))' }}>Cantidad</h4>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center border-2 rounded-full" style={{ borderColor: 'hsl(var(--sand))' }}>
+                    <button onClick={() => setQuantity(q => Math.max(1, q - 1))} disabled={quantity <= 1 || outOfStock}
+                      className="p-3 disabled:opacity-30" style={{ color: 'hsl(var(--earth))' }}>
+                      <Minus size={16} />
+                    </button>
+                    <span className="px-4 font-semibold min-w-[2.5rem] text-center" style={{ color: 'hsl(var(--earth))' }}>{quantity}</span>
+                    <button onClick={() => setQuantity(q => Math.min(product.stock || 99, q + 1))} disabled={quantity >= product.stock || outOfStock}
+                      className="p-3 disabled:opacity-30" style={{ color: 'hsl(var(--earth))' }}>
+                      <Plus size={16} />
+                    </button>
                   </div>
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: outOfStock ? 'hsl(var(--terracotta))' : 'hsl(var(--olive))' }}>
+                    {outOfStock ? 'Agotado' : `${product.stock} disponibles`}
+                  </p>
+                </div>
+              </div>
+
+              {/* Desktop CTA */}
+              <div className="hidden md:flex flex-col gap-3 py-5">
+                <button onClick={handleAddToCart} disabled={outOfStock}
+                  className="clare-btn clare-btn-primary w-full py-4 text-base flex justify-center uppercase tracking-widest font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:transform-none">
+                  <ShoppingBag size={20} className="mr-2" />
+                  {outOfStock ? 'Sin stock' : 'Agregar al carrito'}
+                </button>
+                {product.external_link && (
+                  <a href={product.external_link} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 text-sm underline hover:opacity-80" style={{ color: 'hsl(var(--terracotta))' }}>
+                    <ExternalLink size={14} /> Ver más información
+                  </a>
+                )}
+              </div>
+
+              {/* Trust badges */}
+              <div className="grid grid-cols-2 gap-3 py-4 border-t" style={{ borderColor: 'hsl(var(--sand))' }}>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>
+                  <Truck size={18} style={{ color: 'hsl(var(--olive))' }} />
+                  <span>Envíos a todo el país</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>
+                  <ShieldCheck size={18} style={{ color: 'hsl(var(--olive))' }} />
+                  <span>Hecho a mano con fe</span>
+                </div>
+              </div>
+
+              {/* Collapsible: Description */}
+              {product.description && (
+                <div className="border-t" style={{ borderColor: 'hsl(var(--sand))' }}>
+                  <button onClick={() => setDescOpen(o => !o)}
+                    className="w-full flex items-center justify-between py-4 text-left">
+                    <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--earth))' }}>
+                      Detalles del producto
+                    </span>
+                    <ChevronRightIcon size={18} className="transition-transform" style={{ color: 'hsl(var(--earth))', transform: descOpen ? 'rotate(90deg)' : 'none' }} />
+                  </button>
+                  {descOpen && (
+                    <div className="pb-5 text-sm md:text-base leading-relaxed whitespace-pre-wrap break-words" style={{ color: 'hsl(var(--soft-brown))' }}>
+                      {product.description}
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Add to Cart Area */}
-              <div className="mt-auto flex flex-col gap-4">
-                <div className="flex items-center justify-between px-2">
-                  <p className="text-sm font-semibold uppercase tracking-wider" style={{ color: product.stock > 0 ? 'hsl(var(--olive))' : 'hsl(var(--terracotta))' }}>
-                    {product.stock > 0 ? `Stock Disponible (${product.stock})` : 'Agotado'}
-                  </p>
-                  {product.external_link && (
-                    <a href={product.external_link} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-sm underline transition-colors hover:opacity-80" style={{ color: 'hsl(var(--terracotta))' }}>
-                      <ExternalLink size={14} /> Link externo
-                    </a>
-                  )}
-                </div>
-                
-                <button
-                  onClick={handleAddToCart}
-                  disabled={product.stock <= 0}
-                  className="clare-btn clare-btn-primary w-full py-5 text-lg flex justify-center uppercase tracking-widest font-bold shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl disabled:opacity-50 disabled:transform-none disabled:shadow-none">
-                  <ShoppingBag size={22} className="mr-2" />
-                  {product.stock > 0 ? 'Agregar al carrito' : 'Sin stock'}
+              {/* Collapsible: Shipping */}
+              <div className="border-t" style={{ borderColor: 'hsl(var(--sand))' }}>
+                <button onClick={() => setShipOpen(o => !o)}
+                  className="w-full flex items-center justify-between py-4 text-left">
+                  <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--earth))' }}>
+                    Envíos y pagos
+                  </span>
+                  <ChevronRightIcon size={18} className="transition-transform" style={{ color: 'hsl(var(--earth))', transform: shipOpen ? 'rotate(90deg)' : 'none' }} />
                 </button>
+                {shipOpen && (
+                  <div className="pb-5 text-sm leading-relaxed space-y-2" style={{ color: 'hsl(var(--soft-brown))' }}>
+                    <p>📦 Realizamos envíos a todo el país coordinados por WhatsApp.</p>
+                    <p>💳 Aceptamos transferencia bancaria o pago contra entrega.</p>
+                    <p>🤝 Cualquier consulta, escribinos directamente.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Sticky bottom bar (mobile only) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t shadow-2xl" style={{ backgroundColor: 'hsl(var(--warm-white))', borderColor: 'hsl(var(--sand))' }}>
+        <div className="flex items-center gap-3 p-3">
+          <div className="flex-shrink-0">
+            <p className="text-xs uppercase tracking-wide" style={{ color: 'hsl(var(--soft-brown))' }}>Total</p>
+            <p className="text-lg font-bold leading-tight" style={{ color: 'hsl(var(--terracotta))' }}>
+              ${(finalPrice * quantity).toLocaleString('es-AR')}
+            </p>
+          </div>
+          <button onClick={handleAddToCart} disabled={outOfStock}
+            className="flex-1 py-3.5 rounded-full font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 disabled:opacity-50"
+            style={{ backgroundColor: 'hsl(var(--terracotta))', color: 'hsl(var(--warm-white))' }}>
+            <ShoppingBag size={18} />
+            {outOfStock ? 'Sin stock' : 'Agregar'}
+          </button>
+        </div>
+      </div>
 
       <Footer />
     </div>
