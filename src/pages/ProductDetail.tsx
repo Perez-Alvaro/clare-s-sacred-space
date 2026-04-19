@@ -167,9 +167,9 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Mobile thumbnails (horizontal) */}
+              {/* Thumbnails (horizontal, all sizes) */}
               {images.length > 1 && (
-                <div className="flex md:hidden gap-2 px-4 py-3 overflow-x-auto">
+                <div className="flex gap-2 px-4 py-3 overflow-x-auto">
                   {images.map((img, idx) => (
                     <button key={img.id} onClick={() => setCurrentImage(idx)}
                       className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all"
@@ -182,7 +182,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Info */}
-            <div className="w-full md:w-1/2 p-5 md:p-10 flex flex-col">
+            <div className="w-full p-5 md:p-10 flex flex-col">
               {/* Title + price block */}
               <div className="pb-5 border-b" style={{ borderColor: 'hsl(var(--sand))' }}>
                 <h1 className="text-2xl md:text-4xl font-medium leading-tight mb-2" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>
