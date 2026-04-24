@@ -48,15 +48,6 @@ const About = () => {
                       — Jesús a Hna. Clare Crockett
                     </p>
                   </div>
-                  <div className="w-12 h-px" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                  <div className="space-y-2">
-                    <p className="text-base italic leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
-                      "El salvador hoy nos mira, nos sondea solemnemente y nos pregunta a cada uno de nosotros ¿Serás fiel al crucificado?"
-                    </p>
-                    <p className="text-sm font-medium" style={{ color: 'hsl(var(--terracotta))' }}>
-                      — Edith Stein
-                    </p>
-                  </div>
                 </div>
                 
                 {/* Card 2: Testimonio */}
