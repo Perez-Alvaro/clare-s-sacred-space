@@ -75,9 +75,7 @@ const Shop = () => {
             <div className="text-center mb-12">
               <p className="clare-script mb-4">Nuestras creaciones</p>
               <h1 className="mb-4">Tienda</h1>
-              <p className="max-w-2xl mx-auto text-lg" style={{ color: 'hsl(var(--soft-brown))' }}>
-                Cada pieza es única, creada artesanalmente con amor y dedicación.
-              </p>
+
             </div>
           </RevealOnScroll>
 

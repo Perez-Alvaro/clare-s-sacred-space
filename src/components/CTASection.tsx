@@ -31,12 +31,10 @@ const CTASection = () => {
               </h2>
               
               <p
-                className="text-lg max-w-2xl mx-auto leading-relaxed"
+                className="text-base max-w-2xl mx-auto opacity-90"
                 style={{ color: 'hsl(var(--warm-white))' }}
               >
-                Como Clare ofreció su vida completamente —sin reservas, sin medias tintas— nosotros ofrecemos
-                nuestra artesanía del mismo modo: con entrega total, belleza auténtica, y el deseo profundo de
-                que cada pieza sea, para ti, un refugio portátil de paz.
+                ¿Buscás llevar nuestros productos a tu comunidad? Ofrecemos precios especiales para santerías, grupos juveniles, parroquias y retiros.
               </p>
             </div>
           </RevealOnScroll>
@@ -69,7 +67,7 @@ const CTASection = () => {
                 }}
               >
                 <MessageCircle size={20} />
-                Contactar por WhatsApp
+                Contactar para pedidos mayoristas
               </a>
             </div>
           </RevealOnScroll>

@@ -37,18 +37,35 @@ const About = () => {
                 En 2025, su causa de beatificación fue oficialmente abierta por la Iglesia, siendo declarada Sierva de Dios. Su testimonio no es historia: es invitación viva.
               </p>
               
-              <div className="grid md:grid-cols-2 gap-6 mt-12 text-left">
-                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
-                  <h4 className="mb-4 text-xl font-normal" style={{ color: 'hsl(var(--terracotta))' }}>Detalles que abrazan</h4>
-                  <p className="text-base leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
-                    <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>No son solo objetos.</strong> Llevan una intención silenciosa: recordarte que <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>Dios camina contigo</strong>.
-                  </p>
+              <div className="grid md:grid-cols-2 gap-6 mt-12 text-left h-full">
+                {/* Card 1: Frases */}
+                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center space-y-6" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
+                  <div className="space-y-2">
+                    <p className="text-base italic leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
+                      “Si no puedes caminar, yo te llevaré sobre mis hombros, pero no me dejes”
+                    </p>
+                    <p className="text-sm font-medium" style={{ color: 'hsl(var(--terracotta))' }}>
+                      — Jesús a Hna. Clare Crockett
+                    </p>
+                  </div>
+                  <div className="w-12 h-px" style={{ backgroundColor: 'hsl(var(--sand))' }} />
+                  <div className="space-y-2">
+                    <p className="text-base italic leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
+                      "El salvador hoy nos mira, nos sondea solemnemente y nos pregunta a cada uno de nosotros ¿Serás fiel al crucificado?"
+                    </p>
+                    <p className="text-sm font-medium" style={{ color: 'hsl(var(--terracotta))' }}>
+                      — Edith Stein
+                    </p>
+                  </div>
                 </div>
                 
-                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
-                  <h4 className="mb-4 text-xl font-normal" style={{ color: 'hsl(var(--terracotta))' }}>Refugio portátil de paz</h4>
-                  <p className="text-base leading-relaxed" style={{ color: 'hsl(var(--soft-brown))' }}>
-                    Ofrecemos nuestra artesanía con <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>entrega total</strong> para que cada pieza sea tu <strong style={{ color: 'hsl(var(--earth))', fontWeight: 600 }}>refugio portátil de paz</strong>.
+                {/* Card 2: Testimonio */}
+                <div className="p-8 rounded-2xl shadow-sm transform hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center" style={{ backgroundColor: 'white', border: '1px solid hsl(var(--sand))' }}>
+                  <p className="text-[1.05rem] italic leading-relaxed mb-6" style={{ color: 'hsl(var(--soft-brown))' }}>
+                    "Clare, yo te conocía antes de ser monja y al verte ahora así, solo puedo decir que, o estás loca, o Dios realmente existe"
+                  </p>
+                  <p className="text-sm font-medium" style={{ color: 'hsl(var(--terracotta))' }}>
+                    — Persona que conocía a Clare antes de entrar en SHM
                   </p>
                 </div>
               </div>

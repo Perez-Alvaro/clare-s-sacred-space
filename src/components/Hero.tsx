@@ -25,7 +25,7 @@ const Hero = () => {
           border border-white/40 text-center">
 
           <p className="clare-script mb-6 animate-fade-in delay-100 text-[hsl(var(--earth))]">
-            Fe que se teje en cada detalle
+            Detalles que abrazan
           </p>
 
           <h1 className="mb-6 animate-fade-in-up delay-200">
@@ -34,7 +34,7 @@ const Hero = () => {
 
           <p className="text-xl md:text-2xl mb-12 leading-relaxed animate-fade-in-up delay-300"
             style={{ color: 'hsl(var(--soft-brown))' }}>
-            Es donde la oración toma forma.
+            Es donde la oración toma forma
           </p>
 
           <div className="flex justify-center animate-fade-in-up delay-500 mt-4">
