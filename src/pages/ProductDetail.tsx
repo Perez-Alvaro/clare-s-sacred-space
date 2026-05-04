@@ -5,6 +5,7 @@ import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SmartImage from '@/components/SmartImage';
 
 interface ProductImage { id: string; url: string; alt_text: string | null; sort_order: number | null; }
 interface Product {
@@ -136,7 +137,7 @@ const ProductDetail = () => {
                 <div className="relative bg-slate-50 aspect-square overflow-hidden">
                   {images.length > 0 ? (
                     <>
-                      <img src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
+                      <SmartImage src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
                         className="absolute inset-0 w-full h-full object-cover" />
                       {discountPct > 0 && (
                         <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide"
@@ -174,7 +175,7 @@ const ProductDetail = () => {
                     <button key={img.id} onClick={() => setCurrentImage(idx)}
                       className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all"
                       style={{ borderColor: idx === currentImage ? 'hsl(var(--terracotta))' : 'hsl(var(--sand))', opacity: idx === currentImage ? 1 : 0.6 }}>
-                      <img src={img.url} alt={img.alt_text || ''} className="w-full h-full object-cover" />
+                      <SmartImage src={img.url} alt={img.alt_text || ''} className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>
