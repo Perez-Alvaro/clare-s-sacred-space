@@ -1,6 +1,7 @@
 import { Minus, Plus, Trash2, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { Link } from 'react-router-dom';
+import SmartImage from './SmartImage';
 
 const CartDrawer = () => {
   const { items, isOpen, setIsOpen, removeItem, updateQuantity, subtotal, totalItems } = useCart();
@@ -39,7 +40,7 @@ const CartDrawer = () => {
               {items.map(item => (
                 <div key={item.id} className="flex gap-4">
                   {item.image_url && (
-                    <img src={item.image_url} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
+                    <SmartImage src={item.image_url} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
                   )}
                   <div className="flex-1">
                     <h4 className="text-sm font-medium" style={{ color: 'hsl(var(--earth))' }}>{item.name}</h4>

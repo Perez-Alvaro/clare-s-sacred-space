@@ -2,6 +2,7 @@ import { X, ShoppingBag, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-
 import { useState, useEffect } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
+import SmartImage from './SmartImage';
 
 interface ProductImage {
   id: string;
@@ -115,7 +116,7 @@ const ProductModal = ({ product, onClose }: Props) => {
           <div className="relative w-full h-64 sm:h-80 md:h-full min-h-[250px] bg-slate-100">
             {images.length > 0 ? (
               <>
-                <img src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
+                <SmartImage src={images[currentImage]?.url} alt={images[currentImage]?.alt_text || product.name}
                   className="w-full h-full object-cover md:rounded-l-xl" />
                 {images.length > 1 && (
                   <>

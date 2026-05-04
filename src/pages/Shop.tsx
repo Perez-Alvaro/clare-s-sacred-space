@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import RevealOnScroll from '@/components/RevealOnScroll';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SmartImage from '@/components/SmartImage';
 
 interface Product {
   id: string;
@@ -127,7 +128,7 @@ const Shop = () => {
                     {/* Image */}
                     <Link to={`/producto/${product.id}`} className="relative overflow-hidden rounded-lg mb-4 aspect-square block group-hover:shadow-md transition-all">
                       {getMainImage(product) ? (
-                        <img src={getMainImage(product)} alt={product.name}
+                        <SmartImage src={getMainImage(product)} alt={product.name}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--sand))' }}>
