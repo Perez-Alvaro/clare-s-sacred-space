@@ -49,64 +49,41 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // Create customer
-      const { data: customer, error: custErr } = await supabase.from('customers').insert({
-        email: form.email, full_name: form.full_name, phone: form.phone,
-        address: form.address, city: form.city, province: form.province, postal_code: form.postal_code,
-      }).select().single();
-      if (custErr) throw custErr;
-
-      // Create order
-      const { data: order, error: ordErr } = await supabase.from('orders').insert({
-        customer_id: customer.id,
-        payment_method: form.payment_method,
-        subtotal, tax: 0, total: subtotal,
-        shipping_address: `${form.address}, ${form.city}, ${form.province} ${form.postal_code}`,
-        notes: form.notes || null,
-      }).select().single();
-      if (ordErr) throw ordErr;
-
-      // Create order items
-      const orderItems = items.map(item => ({
-        order_id: order.id, 
-        product_id: item.product_id, 
-        product_name: item.name,
-        quantity: item.quantity, 
-        unit_price: item.price, 
-        total: item.price * item.quantity,
-      }));
-      const { error: itemsErr } = await supabase.from('order_items').insert(orderItems);
-      if (itemsErr) throw itemsErr;
-
-      // Send confirmation email (no bloqueante)
-      supabase.functions.invoke('send-order-confirmation', {
+      const { data, error } = await supabase.functions.invoke('create-order', {
         body: {
-          order_number: order.order_number,
-          customer_name: form.full_name,
-          customer_email: form.email,
-          customer_phone: form.phone,
-          customer_notes: form.notes,
+          full_name: form.full_name,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          city: form.city,
+          province: form.province,
+          postal_code: form.postal_code,
+          notes: form.notes,
           payment_method: form.payment_method,
-          shipping_address: `${form.address}, ${form.city}, ${form.province} ${form.postal_code}`,
-          items: orderItems.map(i => ({
-            product_name: i.product_name, quantity: i.quantity,
-            unit_price: i.unit_price, total: i.total,
+          items: items.map(i => ({
+            product_id: i.product_id,
+            name: i.name,
+            quantity: i.quantity,
+            price: i.price,
           })),
-          total: subtotal,
-          bank_details: form.payment_method === 'bank_transfer' ? bankDetails : undefined,
         },
-      }).catch(err => console.error('Email error:', err));
+      });
 
-      setOrderNumber(order.order_number);
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'No se pudo crear el pedido');
+
+      setOrderNumber(data.order_number);
       setSuccess(true);
       clearCart();
     } catch (err) {
       console.error('Checkout error:', err);
-      alert('Hubo un error al procesar tu pedido. Intenta de nuevo.');
+      const msg = err instanceof Error ? err.message : 'Intenta de nuevo';
+      alert(`Hubo un error al procesar tu pedido. ${msg}`);
     } finally {
       setLoading(false);
     }
   };
+
 
   if (success) {
     return (
