@@ -260,7 +260,7 @@ const ProductDetail = () => {
                     </button>
                   </div>
                   <p className="text-xs font-medium uppercase tracking-wider" style={{ color: outOfStock ? 'hsl(var(--terracotta))' : 'hsl(var(--olive))' }}>
-                    {outOfStock ? 'Agotado' : `${product.stock} disponibles`}
+                    {outOfStock ? 'Agotado' : 'Disponible'}
                   </p>
                 </div>
               </div>
