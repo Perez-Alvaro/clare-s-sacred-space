@@ -166,7 +166,7 @@ const ProductModal = ({ product, onClose }: Props) => {
             </div>
 
             <p className="text-xs mb-4 uppercase tracking-wider" style={{ color: product.stock > 0 ? 'hsl(var(--olive))' : 'hsl(var(--terracotta))' }}>
-              {product.stock > 0 ? `${product.stock} disponible${product.stock > 1 ? 's' : ''}` : 'Agotado'}
+              {product.stock > 0 ? 'Disponible' : 'Agotado'}
             </p>
 
             <div className="flex-1 overflow-y-auto pb-4 pr-1">
