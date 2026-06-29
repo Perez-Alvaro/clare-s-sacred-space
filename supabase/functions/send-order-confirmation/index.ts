@@ -172,12 +172,11 @@ Deno.serve(async (req) => {
   </div>
 </body></html>`;
 
-    const sendEmail = (payload: Record<string, unknown>) => fetch(`${GATEWAY_URL}/emails`, {
+    const sendEmail = (payload: Record<string, unknown>) => fetch(`${RESEND_API_URL}/emails`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'X-Connection-Api-Key': RESEND_API_KEY,
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify(payload),
     });
