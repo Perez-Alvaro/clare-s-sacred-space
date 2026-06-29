@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
       .insert(safeItems.map((i) => ({ order_id: order.id, ...i })));
     if (itemsErr) throw itemsErr;
 
-    // Fire-and-forget confirmation email
+    // Confirmation email (awaited so the Edge runtime doesn't kill it early)
     try {
       let bank_details: string | undefined;
       if (body.payment_method === 'bank_transfer') {
@@ -132,8 +132,9 @@ Deno.serve(async (req) => {
           .single();
         bank_details = setting?.content ?? undefined;
       }
-      admin.functions
-        .invoke('send-order-confirmation', {
+      const { data: emailRes, error: emailErr } = await admin.functions.invoke(
+        'send-order-confirmation',
+        {
           body: {
             order_number: order.order_number,
             customer_name: body.full_name,
@@ -146,10 +147,12 @@ Deno.serve(async (req) => {
             total: subtotal,
             bank_details,
           },
-        })
-        .catch((e) => console.error('email invoke error', e));
+        },
+      );
+      if (emailErr) console.error('send-order-confirmation invoke error', emailErr);
+      else console.log('send-order-confirmation result', emailRes);
     } catch (e) {
-      console.error('email prep error', e);
+      console.error('email send error', e);
     }
 
     return json(200, { success: true, order_number: order.order_number });
