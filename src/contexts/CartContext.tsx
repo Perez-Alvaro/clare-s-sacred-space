@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 export interface CartItem {
   id: string;
@@ -24,9 +24,32 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const STORAGE_KEY = 'clare_cart_v1';
+
+const loadInitial = (): CartItem[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((i) => i && typeof i.id === 'string' && typeof i.quantity === 'number');
+  } catch {
+    return [];
+  }
+};
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(loadInitial);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      /* ignore quota errors */
+    }
+  }, [items]);
 
   const addItem = useCallback((item: Omit<CartItem, 'quantity'>) => {
     setItems(prev => {
