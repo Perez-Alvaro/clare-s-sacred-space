@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { LayoutDashboard, Package, FolderOpen, ShoppingCart, Users, Newspaper, LogOut, Menu, X, ChevronRight, Settings as SettingsIcon } from 'lucide-react';
+import { AdminLayoutSkeleton } from '@/components/skeletons/AdminLayoutSkeleton';
 
 const AdminLayout = () => {
   const { user, isStaff, loading, signOut } = useAuth();
@@ -13,9 +14,7 @@ const AdminLayout = () => {
     if (!loading && (!user || !isStaff)) navigate('/login');
   }, [user, isStaff, loading]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--cream))' }}>
-    <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p>
-  </div>;
+  if (loading) return <AdminLayoutSkeleton />;
 
   if (!user || !isStaff) return null;
 

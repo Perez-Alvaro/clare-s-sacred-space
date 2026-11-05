@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Save } from 'lucide-react';
+import { FormCardSkeleton } from '@/components/skeletons/FormCardSkeleton';
 
 const SETTING_SLUG = 'store-setting-bank-transfer';
 
@@ -47,9 +48,13 @@ const AdminSettings = () => {
       <h1 className="text-2xl mb-6" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>Configuración</h1>
       
       {loading ? (
-        <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p>
+        <FormCardSkeleton
+          fields={0}
+          hasTextarea={true}
+          maxWidth="max-w-2xl"
+        />
       ) : (
-        <div className="clare-card max-w-2xl bg-white border border-slate-200">
+        <div className="clare-card max-w-2xl bg-white border border-slate-200 shadow-warm-sm">
           <h3 className="text-lg font-medium mb-4" style={{ color: 'hsl(var(--earth))' }}>Datos de Transferencia Bancaria</h3>
           <p className="text-sm mb-4" style={{ color: 'hsl(var(--soft-brown))' }}>
             Estos datos aparecerán en la pantalla de pago al finalizar el checkout cuando el cliente elija la opción "Transferencia".
@@ -65,8 +70,18 @@ const AdminSettings = () => {
           <button 
             onClick={handleSave} 
             disabled={saving}
+            aria-busy={saving ? 'true' : undefined}
             className="clare-btn clare-btn-primary text-sm flex items-center gap-2">
-            <Save size={16} /> {saving ? 'Guardando...' : 'Guardar Cambios'}
+            {saving ? (
+              <>
+                <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                <span>Guardando Cambios...</span>
+              </>
+            ) : (
+              <>
+                <Save size={16} /> Guardar Cambios
+              </>
+            )}
           </button>
         </div>
       )}

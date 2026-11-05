@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmartImage from '@/components/SmartImage';
+import { ProductDetailSkeleton } from '@/components/skeletons/ProductDetailSkeleton';
 
 interface ProductImage { id: string; url: string; alt_text: string | null; sort_order: number | null; }
 interface Product {
@@ -38,18 +39,25 @@ const ProductDetail = () => {
       setProduct(data as Product);
       setImages([...(data.product_images || [])].sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0)));
 
-      const { data: vData } = await supabase.from('product_variants').select('*').eq('product_id', id).order('sort_order');
+      // Eliminate N+1 loop with a single nested PostgREST join
+      const { data: vData } = await supabase
+        .from('product_variants')
+        .select('*, product_variant_options(*)')
+        .eq('product_id', id)
+        .order('sort_order');
+
       if (vData && vData.length > 0) {
-        const filledVariants = [];
+        const filledVariants: Variant[] = [];
         const initSelections: Record<string, string[]> = {};
         for (const v of vData) {
-          const { data: opts } = await supabase.from('product_variant_options').select('*').eq('variant_id', v.id).order('sort_order');
-          if (opts && opts.length > 0) {
-            filledVariants.push({ ...v, options: opts });
+          const rawOpts = (v as any).product_variant_options || [];
+          const opts = [...rawOpts].sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0));
+          if (opts.length > 0) {
+            filledVariants.push({ ...v, options: opts } as Variant);
             initSelections[v.id] = v.type === 'single_choice' ? [opts[0].id] : [];
           }
         }
-        setVariants(filledVariants as Variant[]);
+        setVariants(filledVariants);
         setSelectedOptions(initSelections);
       }
       setLoading(false);
@@ -60,8 +68,12 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'hsl(var(--cream))' }}>
-        <p className="animate-pulse" style={{ color: 'hsl(var(--earth))' }}>Cargando producto...</p>
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'hsl(var(--cream))' }}>
+        <Navbar />
+        <main className="flex-1 pt-20 md:pt-24 pb-32 md:pb-16">
+          <ProductDetailSkeleton />
+        </main>
+        <Footer />
       </div>
     );
   }

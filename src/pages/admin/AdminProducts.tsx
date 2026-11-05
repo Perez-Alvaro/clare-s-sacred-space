@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Plus, Pencil, Trash2, Save, X, Upload, Image, Tag, Percent } from 'lucide-react';
+import { DataTableSkeleton } from '@/components/skeletons/DataTableSkeleton';
 
 interface ProductImage { id: string; url: string; alt_text: string | null; sort_order: number | null }
 interface VariantOption { id?: string; label: string; price_modifier: number; sort_order: number }
@@ -30,6 +31,7 @@ const AdminProducts = () => {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [savingDiscount, setSavingDiscount] = useState(false);
   const [tab, setTab] = useState<'products' | 'discounts'>('products');
   const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [editingDiscount, setEditingDiscount] = useState<Partial<Discount> | null>(null);
@@ -52,15 +54,20 @@ const AdminProducts = () => {
   };
 
   const fetchVariants = async (productId: string) => {
+    // Eliminate N+1 loop with a single nested PostgREST join
     const { data: vData } = await supabase
-      .from('product_variants').select('*').eq('product_id', productId).order('sort_order');
+      .from('product_variants')
+      .select('*, product_variant_options(*)')
+      .eq('product_id', productId)
+      .order('sort_order');
     if (!vData) { setVariants([]); return; }
-    const variantsWithOpts: Variant[] = [];
-    for (const v of vData) {
-      const { data: opts } = await supabase
-        .from('product_variant_options').select('*').eq('variant_id', v.id).order('sort_order');
-      variantsWithOpts.push({ ...v, type: v.type as Variant['type'], options: (opts || []) as VariantOption[] });
-    }
+    const variantsWithOpts: Variant[] = vData.map((v: any) => ({
+      ...v,
+      type: v.type as Variant['type'],
+      options: ([...(v.product_variant_options || [])] as VariantOption[]).sort(
+        (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)
+      ),
+    }));
     setVariants(variantsWithOpts);
   };
 
@@ -91,7 +98,9 @@ const AdminProducts = () => {
     for (const file of pendingImages) {
       const ext = file.name.split('.').pop();
       const path = `${productId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await supabase.storage.from('product-images').upload(path, file);
+      const { error } = await supabase.storage.from('product-images').upload(path, file, {
+        cacheControl: '31536000, public, immutable',
+      });
       if (!error) {
         const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path);
         await supabase.from('product_images').insert({
@@ -215,22 +224,27 @@ const AdminProducts = () => {
   // Discount handlers
   const handleSaveDiscount = async () => {
     if (!editingDiscount?.name || !editingDiscount.target_id) return;
-    const payload = {
-      name: editingDiscount.name,
-      type: editingDiscount.type || 'category' as const,
-      target_id: editingDiscount.target_id,
-      percentage: Number(editingDiscount.percentage) || 0,
-      starts_at: editingDiscount.starts_at || null,
-      ends_at: editingDiscount.ends_at || null,
-      is_active: editingDiscount.is_active ?? true,
-    };
-    if (editingDiscount.id) {
-      await supabase.from('discounts').update(payload).eq('id', editingDiscount.id);
-    } else {
-      await supabase.from('discounts').insert(payload);
+    setSavingDiscount(true);
+    try {
+      const payload = {
+        name: editingDiscount.name,
+        type: editingDiscount.type || 'category' as const,
+        target_id: editingDiscount.target_id,
+        percentage: Number(editingDiscount.percentage) || 0,
+        starts_at: editingDiscount.starts_at || null,
+        ends_at: editingDiscount.ends_at || null,
+        is_active: editingDiscount.is_active ?? true,
+      };
+      if (editingDiscount.id) {
+        await supabase.from('discounts').update(payload).eq('id', editingDiscount.id);
+      } else {
+        await supabase.from('discounts').insert(payload);
+      }
+      setEditingDiscount(null);
+      await fetchDiscounts();
+    } finally {
+      setSavingDiscount(false);
     }
-    setEditingDiscount(null);
-    fetchDiscounts();
   };
 
   const handleDeleteDiscount = async (id: string) => {
@@ -454,8 +468,22 @@ const AdminProducts = () => {
 
               {/* Save */}
               <div className="mt-6 flex gap-3">
-                <button onClick={handleSave} disabled={uploading} className="clare-btn clare-btn-primary text-sm">
-                  <Save size={16} /> {uploading ? 'Guardando...' : 'Guardar'}
+                <button
+                  onClick={handleSave}
+                  disabled={uploading}
+                  aria-busy={uploading ? 'true' : undefined}
+                  className="clare-btn clare-btn-primary text-sm flex items-center gap-2"
+                >
+                  {uploading ? (
+                    <>
+                      <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                      <span>Guardando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} /> Guardar
+                    </>
+                  )}
                 </button>
                 <button onClick={() => { setEditing(null); setVariants([]); setPendingImages([]); setPreviewUrls([]); }}
                   className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
@@ -465,7 +493,11 @@ const AdminProducts = () => {
 
           {/* Products table */}
           {loading ? (
-            <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p>
+            <DataTableSkeleton
+              columns={['Producto', 'Precio', 'Stock', 'Categoría', 'Acciones']}
+              rows={6}
+              hasImageThumbnail={true}
+            />
           ) : products.length === 0 ? (
             <div className="clare-card text-center py-12">
               <p style={{ color: 'hsl(var(--soft-brown))' }}>No hay productos aún. Creá el primero.</p>
@@ -598,7 +630,23 @@ const AdminProducts = () => {
                 </div>
               </div>
               <div className="mt-4 flex gap-3">
-                <button onClick={handleSaveDiscount} className="clare-btn clare-btn-primary text-sm"><Save size={16} /> Guardar</button>
+                <button
+                  onClick={handleSaveDiscount}
+                  disabled={savingDiscount}
+                  aria-busy={savingDiscount ? 'true' : undefined}
+                  className="clare-btn clare-btn-primary text-sm flex items-center gap-2"
+                >
+                  {savingDiscount ? (
+                    <>
+                      <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                      <span>Guardando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save size={16} /> Guardar
+                    </>
+                  )}
+                </button>
                 <button onClick={() => setEditingDiscount(null)} className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
               </div>
             </div>

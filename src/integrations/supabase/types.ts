@@ -478,6 +478,28 @@ export type Database = {
         }
         Returns: boolean
       }
+      create_order_atomic: {
+        Args: {
+          p_customer: Json
+          p_order: Json
+          p_items: Json
+        }
+        Returns: {
+          success: boolean
+          order_id: string
+          order_number: number
+          customer_id: string
+        }
+      }
+      get_dashboard_metrics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          products_count: number
+          orders_count: number
+          customers_count: number
+          total_revenue: number
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

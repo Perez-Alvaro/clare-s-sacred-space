@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import RevealOnScroll from '@/components/RevealOnScroll';
+import { NewsCardSkeleton } from '@/components/skeletons/NewsCardSkeleton';
 
 interface NewsItem {
   id: string;
@@ -30,15 +31,7 @@ const NewsSection = () => {
               <h2 className="mb-4">Enterate de las novedades en CLARE</h2>
             </div>
           </RevealOnScroll>
-          <div className="space-y-8 max-w-3xl mx-auto">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="clare-card animate-pulse">
-                <div className="h-48 rounded-lg mb-4" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                <div className="h-5 rounded w-2/3 mb-2" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                <div className="h-3 rounded w-full" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-              </div>
-            ))}
-          </div>
+          <NewsCardSkeleton count={3} />
         </div>
       </section>
     );

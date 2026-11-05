@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Plus, Pencil, Trash2, Save, X, Upload } from 'lucide-react';
 import { useRef } from 'react';
+import { DataTableSkeleton } from '@/components/skeletons/DataTableSkeleton';
 
 interface NewsItem {
   id: string; title: string; slug: string; content: string | null;
@@ -35,7 +36,9 @@ const AdminNews = () => {
     if (pendingFile) {
       const ext = pendingFile.name.split('.').pop();
       const path = `news/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await supabase.storage.from('product-images').upload(path, pendingFile);
+      const { error } = await supabase.storage.from('product-images').upload(path, pendingFile, {
+        cacheControl: '31536000, public, immutable',
+      });
       if (!error) {
         const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(path);
         finalImageUrl = urlData.publicUrl;
@@ -105,7 +108,7 @@ const AdminNews = () => {
                       src={pendingFile ? URL.createObjectURL(pendingFile) : (editing.image_url || '')} 
                       alt="Preview" className="w-full h-full object-cover" 
                     />
-                    <button onClick={() => { setPendingFile(null); setEditing(p => ({ ...p, image_url: null })); fileInputRef.current && (fileInputRef.current.value = ''); }}
+                    <button onClick={() => { setPendingFile(null); setEditing(p => ({ ...p, image_url: null })); if (fileInputRef.current) fileInputRef.current.value = ''; }}
                       className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs bg-white shadow">
                       <X size={14} style={{ color: 'hsl(var(--terracotta))' }} />
                     </button>
@@ -129,15 +132,34 @@ const AdminNews = () => {
             </label>
           </div>
           <div className="mt-4 flex gap-3">
-            <button onClick={handleSave} disabled={uploading} className="clare-btn clare-btn-primary text-sm">
-              <Save size={16} /> {uploading ? 'Guardando...' : 'Guardar'}
+            <button
+              onClick={handleSave}
+              disabled={uploading}
+              aria-busy={uploading ? 'true' : undefined}
+              className="clare-btn clare-btn-primary text-sm flex items-center gap-2"
+            >
+              {uploading ? (
+                <>
+                  <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                  <span>Guardando...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={16} /> Guardar
+                </>
+              )}
             </button>
             <button onClick={() => { setEditing(null); setPendingFile(null); }} className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
           </div>
         </div>
       )}
 
-      {loading ? <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p> : (
+      {loading ? (
+        <DataTableSkeleton
+          columns={['Título', 'Estado', 'Acciones']}
+          rows={5}
+        />
+      ) : (
         <div className="clare-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead><tr style={{ borderBottom: '2px solid hsl(var(--sand))' }}>

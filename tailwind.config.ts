@@ -56,6 +56,12 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      boxShadow: {
+        "warm-sm": "var(--shadow-warm-sm)",
+        "warm-md": "var(--shadow-warm-md)",
+        "warm-lg": "var(--shadow-warm-lg)",
+        "warm-xl": "var(--shadow-warm-xl)",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "test": "npx tsx src/lib/queryClient.test.ts && npx tsx src/hooks/useQueries.test.ts && npx tsx src/components/skeletons/skeletons.test.ts",
     "preview": "vite preview"
   },
   "dependencies": {

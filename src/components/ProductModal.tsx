@@ -52,16 +52,22 @@ const ProductModal = ({ product, onClose }: Props) => {
 
   useEffect(() => {
     const loadVariants = async () => {
-      const { data: vData } = await supabase.from('product_variants').select('*').eq('product_id', product.id).order('sort_order');
+      // Eliminate N+1 loop with a single nested PostgREST join
+      const { data: vData } = await supabase
+        .from('product_variants')
+        .select('*, product_variant_options(*)')
+        .eq('product_id', product.id)
+        .order('sort_order');
       if (!vData || vData.length === 0) return;
       
-      const filledVariants = [];
+      const filledVariants: Variant[] = [];
       const initSelections: Record<string, string[]> = {};
       
       for (const v of vData) {
-        const { data: opts } = await supabase.from('product_variant_options').select('*').eq('variant_id', v.id).order('sort_order');
-        if (opts && opts.length > 0) {
-          filledVariants.push({ ...v, options: opts });
+        const rawOpts = (v as any).product_variant_options || [];
+        const opts = [...rawOpts].sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0));
+        if (opts.length > 0) {
+          filledVariants.push({ ...v, options: opts } as Variant);
           if (v.type === 'single_choice') {
             initSelections[v.id] = [opts[0].id]; // Default select the first option
           } else {
@@ -69,7 +75,7 @@ const ProductModal = ({ product, onClose }: Props) => {
           }
         }
       }
-      setVariants(filledVariants as Variant[]);
+      setVariants(filledVariants);
       setSelectedOptions(initSelections);
     };
     loadVariants();

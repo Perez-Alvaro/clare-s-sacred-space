@@ -49,6 +49,50 @@ const Checkout = () => {
     setLoading(true);
 
     try {
+      const shippingAddress = `${form.address.trim()}, ${form.city.trim()}, ${form.province.trim()}${form.postal_code.trim() ? ' ' + form.postal_code.trim() : ''}`;
+
+      // 1. Attempt atomic transactional checkout via PostgreSQL RPC (1 RTT, ACID rollback)
+      try {
+        const { data: rpcData, error: rpcError } = await supabase.rpc('create_order_atomic', {
+          p_customer: {
+            full_name: form.full_name.trim(),
+            email: form.email.trim().toLowerCase(),
+            phone: form.phone.trim(),
+            address: form.address.trim(),
+            city: form.city.trim(),
+            province: form.province.trim(),
+            postal_code: form.postal_code.trim() || null,
+            notes: form.notes.trim() || null,
+          },
+          p_order: {
+            payment_method: form.payment_method,
+            subtotal: subtotal,
+            tax: 0,
+            total: subtotal,
+            shipping_address: shippingAddress,
+            notes: form.notes.trim() || null,
+          },
+          p_items: items.map(i => ({
+            product_id: i.product_id,
+            product_name: i.name,
+            quantity: i.quantity,
+            unit_price: i.price,
+            total: i.price * i.quantity,
+          })),
+        });
+
+        if (!rpcError && rpcData && (rpcData as any).success) {
+          const res = rpcData as { order_number: number };
+          setOrderNumber(res.order_number);
+          setSuccess(true);
+          clearCart();
+          return;
+        }
+      } catch (rpcErr) {
+        console.warn('create_order_atomic RPC unavailable, activating graceful fallback:', rpcErr);
+      }
+
+      // 2. Graceful fallback to Edge Function in case DB migration is pending remote deployment
       const { data, error } = await supabase.functions.invoke('create-order', {
         body: {
           full_name: form.full_name,
@@ -231,8 +275,20 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <button type="submit" disabled={loading} className="clare-btn clare-btn-primary w-full text-lg">
-                {loading ? 'Procesando...' : 'Confirmar Pedido'}
+              <button
+                type="submit"
+                disabled={loading}
+                aria-busy={loading ? 'true' : undefined}
+                className="clare-btn clare-btn-primary w-full text-lg flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                    <span>Procesando pedido...</span>
+                  </>
+                ) : (
+                  'Confirmar Pedido'
+                )}
               </button>
             </form>
           )}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Plus, Pencil, Trash2, Save, X } from 'lucide-react';
+import { DataTableSkeleton } from '@/components/skeletons/DataTableSkeleton';
 
 interface Category {
   id: string; name: string; slug: string; description: string | null;
@@ -11,6 +12,7 @@ const AdminCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [editing, setEditing] = useState<Partial<Category> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const fetch = async () => {
     const { data } = await supabase.from('categories').select('*').order('sort_order');
@@ -24,15 +26,20 @@ const AdminCategories = () => {
 
   const handleSave = async () => {
     if (!editing?.name) return;
-    const slug = editing.slug || slugify(editing.name);
-    const payload = { name: editing.name, slug, description: editing.description || null, image_url: editing.image_url || null, sort_order: Number(editing.sort_order) || 0, is_active: editing.is_active ?? true };
-    if (editing.id) {
-      await supabase.from('categories').update(payload).eq('id', editing.id);
-    } else {
-      await supabase.from('categories').insert(payload);
+    setSaving(true);
+    try {
+      const slug = editing.slug || slugify(editing.name);
+      const payload = { name: editing.name, slug, description: editing.description || null, image_url: editing.image_url || null, sort_order: Number(editing.sort_order) || 0, is_active: editing.is_active ?? true };
+      if (editing.id) {
+        await supabase.from('categories').update(payload).eq('id', editing.id);
+      } else {
+        await supabase.from('categories').insert(payload);
+      }
+      setEditing(null);
+      await fetch();
+    } finally {
+      setSaving(false);
     }
-    setEditing(null);
-    fetch();
   };
 
   const handleDelete = async (id: string) => {
@@ -71,13 +78,34 @@ const AdminCategories = () => {
             </div>
           </div>
           <div className="mt-4 flex gap-3">
-            <button onClick={handleSave} className="clare-btn clare-btn-primary text-sm"><Save size={16} /> Guardar</button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              aria-busy={saving ? 'true' : undefined}
+              className="clare-btn clare-btn-primary text-sm flex items-center gap-2"
+            >
+              {saving ? (
+                <>
+                  <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                  <span>Guardando...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={16} /> Guardar
+                </>
+              )}
+            </button>
             <button onClick={() => setEditing(null)} className="clare-btn clare-btn-secondary text-sm">Cancelar</button>
           </div>
         </div>
       )}
 
-      {loading ? <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p> : (
+      {loading ? (
+        <DataTableSkeleton
+          columns={['Nombre', 'Slug', 'Estado', 'Acciones']}
+          rows={5}
+        />
+      ) : (
         <div className="clare-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead><tr style={{ borderBottom: '2px solid hsl(var(--sand))' }}>

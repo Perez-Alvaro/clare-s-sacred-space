@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Download, MessageCircle } from 'lucide-react';
+import { DataTableSkeleton } from '@/components/skeletons/DataTableSkeleton';
 
 const AdminCustomers = () => {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -53,7 +54,12 @@ const AdminCustomers = () => {
         />
       </div>
 
-      {loading ? <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p> : (
+      {loading ? (
+        <DataTableSkeleton
+          columns={['Nombre', 'Email', 'Teléfono', 'Ciudad', 'Fecha']}
+          rows={6}
+        />
+      ) : (
         <div className="clare-card overflow-x-auto">
           <table className="w-full text-sm">
             <thead><tr style={{ borderBottom: '2px solid hsl(var(--sand))' }}>

@@ -7,6 +7,7 @@ import RevealOnScroll from '@/components/RevealOnScroll';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmartImage from '@/components/SmartImage';
+import { CatalogCardSkeleton } from '@/components/skeletons/CatalogCardSkeleton';
 
 interface Product {
   id: string;
@@ -106,15 +107,7 @@ const Shop = () => {
 
           {/* Products grid */}
           {loading ? (
-            <div className="clare-grid">
-              {[1, 2, 3, 4, 5, 6].map(i => (
-                <div key={i} className="clare-card animate-pulse">
-                  <div className="aspect-square rounded-lg mb-4" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                  <div className="h-4 rounded mb-2 w-3/4" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                  <div className="h-3 rounded w-1/2" style={{ backgroundColor: 'hsl(var(--sand))' }} />
-                </div>
-              ))}
-            </div>
+            <CatalogCardSkeleton count={6} />
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <p className="clare-script text-xl mb-2" style={{ color: 'hsl(var(--terracotta))' }}>Sin productos aún</p>

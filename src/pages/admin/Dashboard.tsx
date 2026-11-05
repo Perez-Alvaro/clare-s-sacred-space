@@ -1,13 +1,32 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Package, ShoppingCart, Users, TrendingUp } from 'lucide-react';
+import { MetricCardSkeleton } from '@/components/skeletons/MetricCardSkeleton';
+import { DataTableSkeleton } from '@/components/skeletons/DataTableSkeleton';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({ products: 0, orders: 0, customers: 0, revenue: 0 });
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
+      try {
+        const { data, error } = await supabase.rpc('get_dashboard_metrics');
+        if (!error && data) {
+          setStats({
+            products: Number(data.products_count) || 0,
+            orders: Number(data.orders_count) || 0,
+            customers: Number(data.customers_count) || 0,
+            revenue: Number(data.total_revenue) || 0,
+          });
+          return;
+        }
+      } catch (rpcErr) {
+        console.warn('get_dashboard_metrics RPC error, falling back:', rpcErr);
+      }
+
+      // Graceful fallback if RPC is not yet deployed on remote database
       const [prods, ords, custs] = await Promise.all([
         supabase.from('products').select('id', { count: 'exact', head: true }),
         supabase.from('orders').select('id, total', { count: 'exact' }),
@@ -28,8 +47,15 @@ const Dashboard = () => {
       setRecentOrders(data || []);
     };
 
-    fetchStats();
-    fetchRecent();
+    const loadAll = async () => {
+      try {
+        await Promise.all([fetchStats(), fetchRecent()]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAll();
   }, []);
 
   const statCards = [
@@ -48,57 +74,72 @@ const Dashboard = () => {
     <div>
       <h1 className="text-2xl mb-6" style={{ fontFamily: 'var(--font-heading)', color: 'hsl(var(--earth))' }}>Dashboard</h1>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {statCards.map(card => (
-          <div key={card.label} className="clare-card flex items-center gap-4">
-            <div className="p-3 rounded-full" style={{ backgroundColor: `hsl(${card.color} / 0.1)` }}>
-              <card.icon size={24} style={{ color: `hsl(${card.color})` }} />
-            </div>
-            <div>
-              <p className="text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>{card.label}</p>
-              <p className="text-xl font-semibold" style={{ color: 'hsl(var(--earth))' }}>{card.value}</p>
-            </div>
+      {loading ? (
+        <>
+          <MetricCardSkeleton count={4} />
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium" style={{ color: 'hsl(var(--earth))' }}>Últimos pedidos</h3>
+            <DataTableSkeleton
+              columns={['#', 'Cliente', 'Total', 'Estado', 'Fecha']}
+              rows={5}
+            />
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {statCards.map(card => (
+              <div key={card.label} className="clare-card flex items-center gap-4 shadow-warm-sm">
+                <div className="p-3 rounded-full" style={{ backgroundColor: `hsl(${card.color} / 0.1)` }}>
+                  <card.icon size={24} style={{ color: `hsl(${card.color})` }} />
+                </div>
+                <div>
+                  <p className="text-xs" style={{ color: 'hsl(var(--soft-brown))' }}>{card.label}</p>
+                  <p className="text-xl font-semibold" style={{ color: 'hsl(var(--earth))' }}>{card.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <div className="clare-card">
-        <h3 className="text-lg mb-4" style={{ color: 'hsl(var(--earth))' }}>Últimos pedidos</h3>
-        {recentOrders.length === 0 ? (
-          <p className="text-sm" style={{ color: 'hsl(var(--soft-brown))' }}>Sin pedidos aún</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr style={{ borderBottom: '2px solid hsl(var(--sand))' }}>
-                  <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>#</th>
-                  <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Cliente</th>
-                  <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Total</th>
-                  <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Estado</th>
-                  <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOrders.map(order => (
-                  <tr key={order.id} style={{ borderBottom: '1px solid hsl(var(--sand))' }}>
-                    <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>{order.order_number}</td>
-                    <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>{order.customers?.full_name}</td>
-                    <td className="py-3 font-medium" style={{ color: 'hsl(var(--terracotta))' }}>${Number(order.total).toLocaleString('es-AR')}</td>
-                    <td className="py-3">
-                      <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'hsl(var(--sand))', color: 'hsl(var(--earth))' }}>
-                        {statusLabels[order.status] || order.status}
-                      </span>
-                    </td>
-                    <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>
-                      {new Date(order.created_at).toLocaleDateString('es-AR')}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="clare-card shadow-warm-sm">
+            <h3 className="text-lg mb-4" style={{ color: 'hsl(var(--earth))' }}>Últimos pedidos</h3>
+            {recentOrders.length === 0 ? (
+              <p className="text-sm" style={{ color: 'hsl(var(--soft-brown))' }}>Sin pedidos aún</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid hsl(var(--sand))' }}>
+                      <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>#</th>
+                      <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Cliente</th>
+                      <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Total</th>
+                      <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Estado</th>
+                      <th className="text-left py-2 font-medium" style={{ color: 'hsl(var(--earth))' }}>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentOrders.map(order => (
+                      <tr key={order.id} style={{ borderBottom: '1px solid hsl(var(--sand))' }}>
+                        <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>{order.order_number}</td>
+                        <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>{order.customers?.full_name}</td>
+                        <td className="py-3 font-medium" style={{ color: 'hsl(var(--terracotta))' }}>${Number(order.total).toLocaleString('es-AR')}</td>
+                        <td className="py-3">
+                          <span className="px-2 py-1 rounded-full text-xs" style={{ backgroundColor: 'hsl(var(--sand))', color: 'hsl(var(--earth))' }}>
+                            {statusLabels[order.status] || order.status}
+                          </span>
+                        </td>
+                        <td className="py-3" style={{ color: 'hsl(var(--soft-brown))' }}>
+                          {new Date(order.created_at).toLocaleDateString('es-AR')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };

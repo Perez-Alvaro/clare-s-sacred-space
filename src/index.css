@@ -66,10 +66,14 @@
     --font-body: 'Nunito', sans-serif;
     --font-script: 'Great Vibes', cursive;
 
-    /* SOMBRAS SUAVES */
+    /* SOMBRAS SUAVES Y CÁLIDAS FRANCISCANAS */
     --shadow-sm: 0 2px 8px rgba(156, 122, 86, 0.08);
     --shadow-md: 0 4px 16px rgba(156, 122, 86, 0.12);
     --shadow-lg: 0 8px 32px rgba(156, 122, 86, 0.16);
+    --shadow-warm-sm: 0 2px 8px rgba(156, 122, 86, 0.08);
+    --shadow-warm-md: 0 4px 16px rgba(156, 122, 86, 0.14);
+    --shadow-warm-lg: 0 8px 32px rgba(156, 122, 86, 0.18);
+    --shadow-warm-xl: 0 16px 48px rgba(156, 122, 86, 0.22);
 
     /* TRANSICIONES */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -159,6 +163,15 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+  }
+
+  .clare-btn:disabled,
+  .clare-btn[aria-busy="true"] {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   .clare-btn-primary {
@@ -292,5 +305,115 @@
 
   .delay-400 {
     animation-delay: 400ms;
+  }
+
+  /* ====================================================================
+     ✨ KEYFRAMES Y UTILIDADES DE CARGA CON ESTILO FRANCISCANO (R3.1)
+     GPU-accelerated shimmer, micro-spinners y accesibilidad
+     ==================================================================== */
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes spin-warm {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* GPU-Accelerated Franciscan Warm Shimmer Bone */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: hsl(var(--sand) / 0.35);
+    border-radius: var(--radius);
+  }
+
+  .skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsla(var(--warm-white), 0.75) 50%,
+      transparent 100%
+    );
+    animation: shimmer 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  /* Micro-spinner franciscano cálido para botones y transiciones */
+  .spinner-warm {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--sand) / 0.4);
+    border-top-color: currentColor;
+    animation: spin-warm 0.75s linear infinite;
+    display: inline-block;
+    flex-shrink: 0;
+    will-change: transform;
+  }
+
+  .spinner-warm-sm {
+    width: 0.875rem;
+    height: 0.875rem;
+    border-width: 1.75px;
+  }
+
+  .spinner-warm-lg {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 2.5px;
+  }
+
+  /* Barra de progreso de ruta franciscana */
+  .route-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 100;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--terracotta)) 0%,
+      hsl(var(--soft-brown)) 50%,
+      hsl(var(--olive)) 100%
+    );
+    box-shadow: 0 0 10px hsla(var(--terracotta), 0.5);
+    transition: transform 0.25s ease-out, opacity 0.35s ease-out;
+    transform-origin: 0 50%;
+  }
+
+  /* Accesibilidad: Respeta las preferencias de reducción de movimiento */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer::after {
+      display: none !important;
+    }
+    .skeleton-shimmer {
+      animation: none !important;
+      background-color: hsl(var(--sand) / 0.45);
+    }
+    .spinner-warm {
+      animation: none !important;
+      border-style: dotted;
+    }
+    .route-progress-bar {
+      transition: none !important;
+    }
   }
 }

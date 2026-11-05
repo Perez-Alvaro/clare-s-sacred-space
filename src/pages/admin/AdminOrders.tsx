@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Download, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrders, setExpandedOrders] = useState<string[]>([]);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   const fetchOrders = async () => {
     const { data } = await supabase.from('orders')
@@ -24,13 +26,25 @@ const AdminOrders = () => {
   };
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from('orders').update({ status: status as any }).eq('id', id);
-    fetchOrders();
+    if (updatingId) return;
+    setUpdatingId(`${id}-status`);
+    try {
+      await supabase.from('orders').update({ status: status as any }).eq('id', id);
+      await fetchOrders();
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   const updatePaymentStatus = async (id: string, payment_status: string) => {
-    await supabase.from('orders').update({ payment_status: payment_status as any }).eq('id', id);
-    fetchOrders();
+    if (updatingId) return;
+    setUpdatingId(`${id}-payment`);
+    try {
+      await supabase.from('orders').update({ payment_status: payment_status as any }).eq('id', id);
+      await fetchOrders();
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   const exportCSV = () => {
@@ -70,7 +84,30 @@ const AdminOrders = () => {
         <button onClick={exportCSV} className="clare-btn clare-btn-secondary text-sm"><Download size={16} /> Exportar CSV</button>
       </div>
 
-      {loading ? <p style={{ color: 'hsl(var(--soft-brown))' }}>Cargando...</p> : orders.length === 0 ? (
+      {loading ? (
+        <div role="status" aria-busy="true" aria-label="Cargando pedidos" className="space-y-4">
+          <span className="sr-only">Cargando lista de pedidos...</span>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-2xl overflow-hidden shadow-warm-sm border p-6 flex justify-between items-center"
+              style={{ borderColor: 'hsl(var(--sand))' }}
+            >
+              <div className="flex items-center gap-4">
+                <Skeleton className="h-6 w-20 rounded" />
+                <div className="hidden md:flex items-center gap-3">
+                  <Skeleton className="h-4 w-32 rounded" />
+                  <Skeleton className="h-5 w-24 rounded" />
+                </div>
+              </div>
+              <div className="flex items-center gap-6">
+                <Skeleton className="h-6 w-28 rounded" />
+                <Skeleton className="h-5 w-5 rounded-full" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : orders.length === 0 ? (
         <p style={{ color: 'hsl(var(--soft-brown))' }}>Sin pedidos</p>
       ) : (
         <div className="space-y-4">

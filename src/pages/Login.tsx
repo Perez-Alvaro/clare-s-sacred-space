@@ -61,8 +61,20 @@ const Login = () => {
                 className="w-full px-4 py-3 rounded-lg border text-sm outline-none"
                 style={{ borderColor: 'hsl(var(--sand))', backgroundColor: 'hsl(var(--warm-white))', color: 'hsl(var(--earth))' }} />
             </div>
-            <button type="submit" disabled={loading} className="clare-btn clare-btn-primary w-full">
-              {loading ? 'Cargando...' : isSignUp ? 'Registrarse' : 'Entrar'}
+            <button
+              type="submit"
+              disabled={loading}
+              aria-busy={loading ? 'true' : undefined}
+              className="clare-btn clare-btn-primary w-full flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <span className="spinner-warm spinner-warm-sm" aria-hidden="true" />
+                  <span>{isSignUp ? 'Registrando...' : 'Iniciando sesión...'}</span>
+                </>
+              ) : (
+                isSignUp ? 'Registrarse' : 'Entrar'
+              )}
             </button>
           </form>
 
